@@ -26,7 +26,8 @@ npm run dev / build / preview / test
 - **Stores** (`src/stores/`, all `persist: true`): `profile` (strategy picks incl. `primaryField`, `nightMode`), `progress` (levels, specs, evalCount → key-cost ladder, lifeGoals unlock flags, maistirHistory), `counters` (period-keyed logs — counters "reset" by reading the current period key; history feeds the Almanac; has an `afterHydrate` migration from the old single-bucket shape), `tasks` (template completions keyed templateId→periodKey, custom tasks, `visibleTasks` filters by profile/progress conditions), `ledger` (key + gold transactions, timestamps drive Almanac weekly nets).
 - **Game data / copy** (`src/data/`) — ALL user-facing game text lives here, never inline in components: `tasks.ts` (seed task templates + conditions + optional `help` key, milestones), `fields.ts` (specialization decision guide, key ladder), `help.ts` (every ?-popover, keyed by topic), `goldGuide.ts` (KR-trend revenue streams + principles), `season.ts` (5 season phases).
 - **Help system**: `<HelpTip topic="key" [light]>` looks up `HELP[topic]` → popover with optional router links. `light` variant for use inside green bars. Add topics in `help.ts` only.
-- **Pages**: Dashboard (chips, phase banner, counter dials, 4 checklists, heat strip, DeadlineRail, KeyLedgerWidget), Planner (strategy/spec chooser — tailors tasks & milestones), Progress, GoldGuide (dims streams the user's build can't run), Almanac (per-week archive derived from counters/tasks/ledger — nothing extra tracked), Ledger, Settings (JSON export/import, reset).
+- **Pages**: Dashboard (chips, phase banner, counter dials, 4 checklists, heat strip, DeadlineRail, KeyLedgerWidget), Planner (strategy/spec chooser — tailors tasks & milestones), Progress, GoldGuide (dims streams the user's build can't run), MaistirGuide (`/maistir` — path-to-rank steps, rank tiers, KR treadmill rules, currency cards + spend-priority tiers + permanent-vs-temporary card; data in `maistirGuide.ts`, lines render "Lead — detail" with bold lead), Almanac (per-week archive derived from counters/tasks/ledger — nothing extra tracked), Ledger, Settings (JSON export/import, reset).
+- **Open facts to pin when confirmed in-game** (marked unverified in `maistirGuide.ts` copy): whether Maistir evaluation re-entry is automatic after the first Krom application; whether keys/coins wipe at season end; Dan-rank permanence across seasons (inference: yes).
 
 ## Theme (matches the printed field guide)
 
@@ -42,6 +43,7 @@ npm run dev / build / preview / test
 - pinia-plugin-persistedstate v4 requires pinia 3; migration hook is `persist.afterHydrate`.
 - Changing a store's state shape: add an `afterHydrate` migration (see `counters.ts`) — both users have live data.
 - KR sources: arca.live and namu.wiki block WebFetch (403); mabinogi.dev returns empty. Use WebSearch summaries + official KR notices (m.mabinogi.nexon.com). Label unverified KR market claims as trends to verify, not facts.
+- **Research access tricks (verified Aug 2026):** arca.live and dcinside ARE readable via `https://r.jina.ai/<url>` (namu.wiki is not). Full NA patch notes: Steam news API `api.steampowered.com/ISteamNews/GetNewsForApp/v2/?appid=212200` (nexon.com news pages are JS shells). Mabinogi World Wiki 403s WebFetch but serves raw wikitext to `Invoke-WebRequest` with a browser UA via `index.php?title=X&action=raw`.
 
 ## Domain rules that shape features
 
