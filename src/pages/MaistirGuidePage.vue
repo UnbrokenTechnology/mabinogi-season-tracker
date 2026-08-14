@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PATH_STEPS, RANK_TIERS, MAINTAIN_RULES, CURRENCIES, SPEND_PRIORITY } from '../data/maistirGuide'
+import { PATH_STEPS, RANK_TIERS, MAINTAIN_RULES, CURRENCIES, SPEND_PRIORITY, STICKINESS } from '../data/maistirGuide'
 
 const tone = {
   green: 'var(--fg-green)',
@@ -146,6 +146,40 @@ const GLANCE = ['Register (G28)', 'Life Lv 30', '6 Basics Lv 5', 'Spec Lv 5', 'D
         </q-card>
       </div>
     </div>
+
+    <!-- Permanent vs temporary -->
+    <q-card flat class="fg-card overflow-hidden q-mb-md">
+      <div class="fg-bar">
+        <q-icon name="hourglass_bottom" size="16px" class="fg-bar-gold" />
+        <span class="fg-bar-title">What sticks when you buy it — <span class="fg-bar-gold">the Feb 4 reset test</span></span>
+      </div>
+      <q-card-section class="row q-col-gutter-md">
+        <div class="col-12 col-sm-6">
+          <div class="fg-label q-mb-xs fg-green-text">
+            <q-icon name="lock" size="13px" class="q-mr-xs" />Permanent — survives the reset
+          </div>
+          <div v-for="l in STICKINESS.permanent" :key="l" class="cur-line text-body2">
+            <span class="text-weight-bold fg-ink">{{ splitLine(l).lead }}</span>
+            <span v-if="splitLine(l).rest" class="fg-muted"> — {{ splitLine(l).rest }}</span>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6">
+          <div class="fg-label q-mb-xs fg-red-text">
+            <q-icon name="hourglass_empty" size="13px" class="q-mr-xs" />Temporary — the season takes it back
+          </div>
+          <div v-for="l in STICKINESS.temporary" :key="l" class="cur-line text-body2">
+            <span class="text-weight-bold fg-ink">{{ splitLine(l).lead }}</span>
+            <span v-if="splitLine(l).rest" class="fg-muted"> — {{ splitLine(l).rest }}</span>
+          </div>
+        </div>
+      </q-card-section>
+      <q-card-section class="q-py-sm fg-tint-gold">
+        <div class="text-caption fg-ink">
+          <q-icon name="sell" size="13px" class="fg-gold-text q-mr-xs" />The season's exit strategy: everything in the
+          right column should be converted into something in the left column before late January.
+        </div>
+      </q-card-section>
+    </q-card>
 
     <div class="row q-col-gutter-md">
       <div v-for="c in CURRENCIES" :key="c.id" class="col-12 col-md-6">

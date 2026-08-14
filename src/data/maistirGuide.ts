@@ -290,3 +290,25 @@ export const SPEND_PRIORITY: SpendPriority[] = [
     ]
   }
 ]
+
+// What survives the Feb 4 reset vs what the season takes back with it.
+export interface Stickiness {
+  permanent: string[]
+  temporary: string[]
+}
+
+export const STICKINESS: Stickiness = {
+  permanent: [
+    'Dan ranks & test scores — the 10/20/30K gold fees buy normal skill advancement; it works next season too',
+    'Treasure-chest gold — the 300K–50M payout is plain gold, yours forever',
+    'Ordinary shop materials — leathers, ores, fabric, firewood from the coin shops are normal items',
+    'Gold from selling products — dishes, stew, barter profits all convert to permanent wealth'
+  ],
+  temporary: [
+    'Specialization levels & points — every key spent on evaluations wipes at season end',
+    'Cauldron recipe unlocks — explicitly re-cost keys "each season"',
+    'Seasonal rare materials — the items linger but become exchange fodder after the reset; use or sell by late January',
+    'Crafted consumables — essence items 14 days, Ether Powder / preservatives 30 days, dishes limited by freshness',
+    'Keys & coins themselves — carry-over unconfirmed; treat both as use-it-or-lose-it'
+  ]
+}
