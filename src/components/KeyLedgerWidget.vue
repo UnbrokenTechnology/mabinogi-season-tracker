@@ -16,40 +16,41 @@ function quickAdd(sign: 1 | -1, category: KeyCategory) {
 </script>
 
 <template>
-  <q-card flat bordered class="bg-dark">
-    <q-card-section class="q-pb-xs">
-      <div class="row items-center">
-        <q-icon name="key" color="secondary" size="22px" class="q-mr-sm" />
-        <div class="text-subtitle1 text-weight-bold">Life Association Keys</div>
-        <q-space />
-        <div class="text-h5 text-secondary text-weight-bold">{{ ledger.keyBalance }}</div>
-      </div>
-    </q-card-section>
-    <q-card-section class="q-py-xs">
-      <div class="row q-col-gutter-sm text-center">
+  <q-card flat class="fg-card overflow-hidden">
+    <div class="fg-bar">
+      <q-icon name="key" size="16px" :style="{ color: 'var(--fg-gold)' }" />
+      <span class="fg-bar-title">Life Association Keys</span>
+      <q-space />
+      <span class="fg-display text-h5 text-weight-bold" :style="{ color: 'var(--fg-gold)' }">{{ ledger.keyBalance }}</span>
+    </div>
+
+    <q-card-section class="q-py-sm fg-tint-gold">
+      <div class="row text-center">
         <div class="col-4">
-          <div class="text-caption text-grey-6">Next eval costs</div>
-          <div class="text-subtitle1 text-weight-bold" :class="ledger.keyBalance >= progress.nextEvalCost ? 'text-positive' : 'text-negative'">
-            {{ progress.nextEvalCost }} <q-icon name="key" size="14px" />
+          <div class="fg-label">Next eval</div>
+          <div class="text-subtitle1 text-weight-bold"
+               :class="ledger.keyBalance >= progress.nextEvalCost ? 'fg-green-text' : 'fg-red-text'">
+            {{ progress.nextEvalCost }} <q-icon name="key" size="13px" />
           </div>
         </div>
         <div class="col-4">
-          <div class="text-caption text-grey-6">Next 5 evals</div>
-          <div class="text-subtitle1">{{ progress.costOfNextN(5) }} <q-icon name="key" size="14px" /></div>
+          <div class="fg-label">Next 5</div>
+          <div class="text-subtitle1 text-weight-bold fg-gold-text">{{ progress.costOfNextN(5) }} <q-icon name="key" size="13px" /></div>
         </div>
         <div class="col-4">
-          <div class="text-caption text-grey-6">Evals taken</div>
-          <div class="text-subtitle1">{{ progress.evalCount }}</div>
+          <div class="fg-label">Evals taken</div>
+          <div class="text-subtitle1 text-weight-bold fg-ink">{{ progress.evalCount }}</div>
         </div>
       </div>
     </q-card-section>
     <q-separator />
     <q-card-section class="q-py-sm">
       <div class="row q-gutter-xs items-center">
-        <q-input v-model.number="quickAmount" type="number" dense outlined placeholder="1" style="width: 70px" />
-        <q-btn dense size="sm" unelevated color="positive" icon="add" label="earn" @click="quickAdd(1, 'delivery')" />
-        <q-btn dense size="sm" unelevated color="negative" icon="remove" label="spend" @click="quickAdd(-1, 'other')" />
-        <q-btn dense size="sm" flat color="secondary" label="full ledger" to="/ledger" />
+        <q-input v-model.number="quickAmount" type="number" dense outlined placeholder="1" style="width: 68px" />
+        <q-btn dense size="sm" unelevated color="positive" icon="add" label="earn" no-caps @click="quickAdd(1, 'delivery')" />
+        <q-btn dense size="sm" unelevated color="negative" icon="remove" label="spend" no-caps @click="quickAdd(-1, 'other')" />
+        <q-space />
+        <q-btn dense size="sm" flat class="fg-gold-text" label="full ledger →" no-caps to="/ledger" />
       </div>
     </q-card-section>
   </q-card>

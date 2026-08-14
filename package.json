@@ -10,6 +10,8 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@fontsource/cormorant-garamond": "^5.3.0",
+    "@fontsource/lato": "^5.3.0",
     "@quasar/extras": "^1.16.12",
     "pinia": "^3.0.1",
     "pinia-plugin-persistedstate": "^4.1.3",

@@ -19,21 +19,22 @@ const cells = computed(() => {
   return out
 })
 
-function cellColor(rate: number): string {
-  if (rate >= 0.999) return '#4e8a43'
-  if (rate >= 0.66) return '#6f8a3c'
-  if (rate >= 0.33) return '#8a7a30'
-  if (rate > 0) return '#8a5a2a'
-  return '#2a2f2b'
+function cellStyle(rate: number): Record<string, string> {
+  if (rate <= 0) return { background: 'var(--fg-page)', border: '1px solid var(--fg-card-border)' }
+  const mix = Math.round(25 + rate * 75)
+  return {
+    background: `color-mix(in srgb, var(--fg-green) ${mix}%, var(--fg-green-tint))`,
+    border: '1px solid var(--fg-green)'
+  }
 }
 </script>
 
 <template>
   <div>
-    <div class="text-caption text-grey-6 q-mb-xs">Daily routine — last {{ DAYS }} days</div>
+    <div class="fg-label q-mb-xs">Daily routine — last {{ DAYS }} days</div>
     <div class="row q-gutter-xs">
       <div v-for="c in cells" :key="c.key" class="heat-cell"
-           :style="{ background: cellColor(c.rate), outline: c.isToday ? '1px solid #c9a227' : 'none' }">
+           :style="{ ...cellStyle(c.rate), outline: c.isToday ? '2px solid var(--fg-gold)' : 'none' }">
         <q-tooltip>{{ c.key }} — {{ Math.round(c.rate * 100) }}%</q-tooltip>
       </div>
     </div>
@@ -42,8 +43,8 @@ function cellColor(rate: number): string {
 
 <style scoped>
 .heat-cell {
-  width: 18px;
-  height: 18px;
-  border-radius: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
 }
 </style>

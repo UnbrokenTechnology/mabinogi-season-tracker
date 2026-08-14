@@ -1,0 +1,212 @@
+// ============================================================
+// Field-guide theme — parchment print look (light, default)
+// with a "night on the farm" dark variant. All colors flow
+// through CSS custom properties so components stay theme-blind.
+// ============================================================
+
+body
+  // parchment & ink
+  --fg-page: #f4efe1
+  --fg-card: #fdfaf1
+  --fg-card-border: #ddd4ba
+  --fg-ink: #2e2b22
+  --fg-muted: #7c7565
+  // structure greens
+  --fg-green-deep: #1c3125
+  --fg-green-deep-2: #12211a
+  --fg-green: #2f5d3a
+  --fg-green-tint: #e7efe3
+  // economy golds
+  --fg-gold: #c9a227
+  --fg-gold-ink: #8f6f14
+  --fg-gold-tint: #f6efd7
+  // deadline reds
+  --fg-red: #b5342b
+  --fg-red-tint: #fbecea
+  // text on deep green
+  --fg-cream: #f3ecd9
+  --fg-shadow: 0 1px 3px rgba(46, 43, 34, 0.10), 0 1px 2px rgba(46, 43, 34, 0.06)
+
+  background: var(--fg-page)
+  color: var(--fg-ink)
+  font-family: 'Lato', 'Segoe UI', sans-serif
+
+body.body--dark
+  --fg-page: #141b16
+  --fg-card: #1c241e
+  --fg-card-border: #31402f
+  --fg-ink: #e8e2cf
+  --fg-muted: #9a947f
+  --fg-green-deep: #1a2c20
+  --fg-green-deep-2: #0f1b13
+  --fg-green: #7fae7a
+  --fg-green-tint: #223227
+  --fg-gold: #c9a227
+  --fg-gold-ink: #d4b04a
+  --fg-gold-tint: #2c2a1c
+  --fg-red: #e06055
+  --fg-red-tint: #3a221f
+  --fg-cream: #f3ecd9
+  --fg-shadow: 0 1px 4px rgba(0, 0, 0, 0.5)
+
+  background: var(--fg-page)
+  color: var(--fg-ink)
+
+// ---------------- typography ----------------
+
+.fg-display
+  font-family: 'Cormorant Garamond', Georgia, serif
+  font-weight: 600
+  letter-spacing: 0.06em
+
+.fg-eyebrow
+  font-size: 11px
+  font-weight: 700
+  letter-spacing: 0.22em
+  text-transform: uppercase
+  color: var(--fg-gold-ink)
+
+.fg-label
+  font-size: 11px
+  font-weight: 700
+  letter-spacing: 0.14em
+  text-transform: uppercase
+  color: var(--fg-muted)
+
+.fg-ink
+  color: var(--fg-ink)
+.fg-muted
+  color: var(--fg-muted)
+.fg-gold-text
+  color: var(--fg-gold-ink)
+.fg-green-text
+  color: var(--fg-green)
+.fg-red-text
+  color: var(--fg-red)
+
+// ---------------- surfaces ----------------
+
+.fg-page
+  background: var(--fg-page)
+
+.fg-card
+  background: var(--fg-card) !important
+  border: 1px solid var(--fg-card-border)
+  border-radius: 8px
+  color: var(--fg-ink)
+  box-shadow: var(--fg-shadow)
+
+// deep-green section bar (like "THE CLOCK — MEMORIZE THESE")
+.fg-bar
+  background: linear-gradient(135deg, var(--fg-green-deep) 0%, var(--fg-green-deep-2) 100%)
+  color: var(--fg-cream)
+  padding: 8px 16px
+  border-radius: 7px 7px 0 0
+  display: flex
+  align-items: center
+  gap: 8px
+  .fg-bar-title
+    font-size: 12px
+    font-weight: 700
+    letter-spacing: 0.18em
+    text-transform: uppercase
+  .fg-bar-gold
+    color: var(--fg-gold)
+
+// gold badge chip (like "FOOD MAISTIR · FARMING GATHERER")
+.fg-gold-badge
+  background: var(--fg-gold)
+  color: #1c3125
+  font-size: 11px
+  font-weight: 700
+  letter-spacing: 0.12em
+  text-transform: uppercase
+  padding: 3px 10px
+  border-radius: 4px
+  display: inline-block
+
+// numbered section header ("0 SETUP" with rule)
+.fg-section
+  display: flex
+  align-items: baseline
+  gap: 10px
+  border-bottom: 2px solid var(--fg-ink)
+  padding-bottom: 6px
+  margin-bottom: 12px
+  .fg-section-num
+    background: var(--fg-green-deep)
+    color: var(--fg-gold)
+    width: 26px
+    height: 26px
+    border-radius: 50%
+    display: inline-flex
+    align-items: center
+    justify-content: center
+    font-size: 13px
+    font-weight: 700
+    align-self: center
+    flex: 0 0 auto
+  .fg-section-title
+    font-family: 'Cormorant Garamond', Georgia, serif
+    font-size: 26px
+    font-weight: 600
+    letter-spacing: 0.12em
+    text-transform: uppercase
+  .fg-section-side
+    margin-left: auto
+    font-size: 11px
+    font-weight: 700
+    letter-spacing: 0.14em
+    text-transform: uppercase
+    color: var(--fg-muted)
+
+// red callout ("BEFORE SPENDING A SINGLE KEY")
+.fg-callout-red
+  background: var(--fg-red-tint)
+  border: 1.5px solid var(--fg-red)
+  border-radius: 8px
+  padding: 12px 16px
+  .fg-callout-title
+    color: var(--fg-red)
+    font-size: 12px
+    font-weight: 700
+    letter-spacing: 0.16em
+    text-transform: uppercase
+    margin-bottom: 6px
+
+// tinted panels
+.fg-tint-green
+  background: var(--fg-green-tint)
+.fg-tint-gold
+  background: var(--fg-gold-tint)
+.fg-tint-red
+  background: var(--fg-red-tint)
+
+// zebra list rows (like the clock table)
+.fg-zebra > .q-item:nth-child(even),
+.fg-zebra > div:nth-child(even) .q-item
+  background: color-mix(in srgb, var(--fg-gold-tint) 55%, var(--fg-card))
+
+// ---------------- quasar tweaks on parchment ----------------
+
+.q-card.fg-card .q-separator
+  background: var(--fg-card-border)
+
+.fg-card .q-item__label--caption
+  color: var(--fg-muted)
+
+.q-checkbox__bg
+  border-radius: 3px
+
+// header tabs
+.fg-tabs .q-tab
+  color: var(--fg-cream)
+  opacity: 0.75
+  letter-spacing: 0.1em
+.fg-tabs .q-tab--active
+  color: var(--fg-gold)
+  opacity: 1
+
+.fg-strike
+  text-decoration: line-through
+  color: var(--fg-muted) !important

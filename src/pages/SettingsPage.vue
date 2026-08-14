@@ -59,15 +59,15 @@ function resetAll() {
 </script>
 
 <template>
-  <q-page padding class="bg-dark-page">
-    <div class="text-h5 text-secondary text-weight-bold q-mb-md">Settings</div>
+  <q-page padding>
+    <div class="fg-display text-h4 fg-ink q-mb-md">Settings</div>
 
     <div class="row q-col-gutter-md">
       <div class="col-12 col-md-6">
-        <q-card flat bordered class="bg-dark q-mb-md">
+        <q-card flat class="fg-card q-mb-md">
           <q-card-section>
             <div class="text-subtitle1 text-weight-bold q-mb-sm">Backup & sync</div>
-            <p class="text-body2 text-grey-5">
+            <p class="text-body2 fg-muted">
               All data lives in <b>this browser's localStorage</b> — each person using the tool
               (on their own browser/device) has completely independent data. To move or back up
               your data, export a JSON file and import it elsewhere.
@@ -81,7 +81,7 @@ function resetAll() {
           </q-card-section>
         </q-card>
 
-        <q-card flat bordered class="bg-dark">
+        <q-card flat class="fg-card">
           <q-card-section>
             <div class="text-subtitle1 text-weight-bold text-negative q-mb-sm">Danger zone</div>
             <q-btn outline color="negative" icon="delete_forever" label="Reset all data" @click="resetAll" />
@@ -90,10 +90,10 @@ function resetAll() {
       </div>
 
       <div class="col-12 col-md-6">
-        <q-card flat bordered class="bg-dark">
+        <q-card flat class="fg-card">
           <q-card-section>
             <div class="text-subtitle1 text-weight-bold q-mb-sm">About</div>
-            <p class="text-body2 text-grey-5">
+            <p class="text-body2 fg-muted">
               Tracker for Mabinogi's <b>Lughnasadh Season 1</b> (Aug 13 2026 → Feb 4 2027):
               Life Association commissions, Taillteann Farm routine, key economy, and the Maistir treadmill.
             </p>

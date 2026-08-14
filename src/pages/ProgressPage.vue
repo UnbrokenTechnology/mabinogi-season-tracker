@@ -23,13 +23,13 @@ const allTrees = [
 </script>
 
 <template>
-  <q-page padding class="bg-dark-page">
-    <div class="text-h5 text-secondary text-weight-bold q-mb-md">Progress</div>
+  <q-page padding>
+    <div class="fg-display text-h4 fg-ink q-mb-md">Progress</div>
 
     <div class="row q-col-gutter-md">
       <!-- Life level + basics -->
       <div class="col-12 col-md-6 col-lg-4">
-        <q-card flat bordered class="bg-dark q-mb-md">
+        <q-card flat class="fg-card q-mb-md">
           <q-card-section>
             <div class="text-subtitle1 text-weight-bold q-mb-sm">
               <q-icon name="star" color="secondary" class="q-mr-xs" />Season Life Level
@@ -38,13 +38,13 @@ const allTrees = [
               <div class="text-h3 text-secondary text-weight-bold">{{ progress.lifeLevel }}</div>
               <div class="col">
                 <q-slider v-model="progress.lifeLevel" :min="1" :max="30" color="secondary" label />
-                <div class="text-caption text-grey-6">EXP only from commissions (20/wk). Week 1 ≈ Lv 21, week 2 = 30.</div>
+                <div class="text-caption fg-muted">EXP only from commissions (20/wk). Week 1 ≈ Lv 21, week 2 = 30.</div>
               </div>
             </div>
           </q-card-section>
         </q-card>
 
-        <q-card flat bordered class="bg-dark">
+        <q-card flat class="fg-card">
           <q-card-section>
             <div class="row items-center q-mb-sm">
               <div class="text-subtitle1 text-weight-bold">
@@ -59,9 +59,9 @@ const allTrees = [
               <q-icon :name="b.icon" size="18px" class="q-mr-sm" color="grey-5" />
               <div style="width: 110px">{{ b.label }}</div>
               <q-rating v-model="progress.basics[b.id]" :max="5" size="20px" color="secondary" icon="circle" icon-selected="circle" />
-              <div class="q-ml-sm text-caption text-grey-6">{{ progress.basics[b.id] }}/5</div>
+              <div class="q-ml-sm text-caption fg-muted">{{ progress.basics[b.id] }}/5</div>
             </div>
-            <div class="text-caption text-grey-6 q-mt-sm">
+            <div class="text-caption fg-muted q-mt-sm">
               Spread points evenly — favorites waste nothing but time; all six at 5 is the hard gate.
             </div>
           </q-card-section>
@@ -70,7 +70,7 @@ const allTrees = [
 
       <!-- Specializations -->
       <div class="col-12 col-md-6 col-lg-4">
-        <q-card flat bordered class="bg-dark q-mb-md">
+        <q-card flat class="fg-card q-mb-md">
           <q-card-section>
             <div class="text-subtitle1 text-weight-bold q-mb-sm">
               <q-icon name="alt_route" color="primary" class="q-mr-xs" />Specializations
@@ -84,7 +84,7 @@ const allTrees = [
               </div>
               <q-rating v-model="progress.specs[t.id]" :max="5" size="20px"
                         :color="t.craft ? 'secondary' : 'primary'" icon="circle" icon-selected="circle" />
-              <div class="q-ml-sm text-caption text-grey-6">{{ progress.specs[t.id] }}/5</div>
+              <div class="q-ml-sm text-caption fg-muted">{{ progress.specs[t.id] }}/5</div>
             </div>
             <q-separator class="q-my-sm" />
             <div class="row items-center q-gutter-sm">
@@ -92,12 +92,12 @@ const allTrees = [
               <q-btn dense size="sm" outline icon="remove" :disable="progress.evalCount <= 0" @click="progress.evalCount--" />
               <div class="text-h6 text-secondary">{{ progress.evalCount }}</div>
               <q-btn dense size="sm" unelevated color="primary" icon="add" @click="progress.evalCount++" />
-              <div class="text-caption text-grey-6">next costs {{ progress.nextEvalCost }} key(s)</div>
+              <div class="text-caption fg-muted">next costs {{ progress.nextEvalCost }} key(s)</div>
             </div>
           </q-card-section>
         </q-card>
 
-        <q-card flat bordered class="bg-dark">
+        <q-card flat class="fg-card">
           <q-card-section>
             <div class="text-subtitle1 text-weight-bold q-mb-sm">
               <q-icon name="flag" color="primary" class="q-mr-xs" />Season Life Goals
@@ -106,7 +106,7 @@ const allTrees = [
               <q-btn dense size="sm" outline icon="remove" :disable="progress.lifeGoals <= 0" @click="progress.lifeGoals--" />
               <div class="text-h4 text-secondary text-weight-bold">{{ progress.lifeGoals }}</div>
               <q-btn dense size="sm" unelevated color="primary" icon="add" @click="progress.lifeGoals++" />
-              <div class="text-caption text-grey-6">Life Goals completed</div>
+              <div class="text-caption fg-muted">Life Goals completed</div>
             </div>
             <q-list dense>
               <q-item v-for="(u, label) in {
@@ -116,7 +116,7 @@ const allTrees = [
                 'Treasure Chests (15)': progress.goalUnlocks.treasureChests
               }" :key="label">
                 <q-item-section side><q-icon :name="u ? 'check_circle' : 'radio_button_unchecked'" :color="u ? 'positive' : 'grey-7'" size="18px" /></q-item-section>
-                <q-item-section :class="u ? '' : 'text-grey-6'">{{ label }}</q-item-section>
+                <q-item-section :class="u ? '' : 'fg-muted'">{{ label }}</q-item-section>
               </q-item>
             </q-list>
             <div class="row items-center q-gutter-sm q-mt-sm">
@@ -125,14 +125,14 @@ const allTrees = [
               <div class="text-subtitle1 text-secondary">{{ progress.farmExpansionGoals }}</div>
               <q-btn dense size="sm" unelevated color="primary" icon="add" @click="progress.farmExpansionGoals++" />
             </div>
-            <div class="text-caption text-grey-6">Expansion first — both Rubber Trees ASAP; rubber is the season's bottleneck.</div>
+            <div class="text-caption fg-muted">Expansion first — both Rubber Trees ASAP; rubber is the season's bottleneck.</div>
           </q-card-section>
         </q-card>
       </div>
 
       <!-- Maistir history -->
       <div class="col-12 col-lg-4">
-        <q-card flat bordered class="bg-dark">
+        <q-card flat class="fg-card">
           <q-card-section>
             <div class="text-subtitle1 text-weight-bold q-mb-sm">
               <q-icon name="military_tech" color="secondary" class="q-mr-xs" />Maistir Evaluations
@@ -163,7 +163,7 @@ const allTrees = [
                 </q-item-section>
               </q-item>
               <q-item v-if="progress.maistirHistory.length === 0">
-                <q-item-section class="text-grey-6 text-caption">
+                <q-item-section class="fg-muted text-caption">
                   No evaluations yet. First one resolves Aug 27 — scoring closes at MIDNIGHT Aug 26→27.
                 </q-item-section>
               </q-item>

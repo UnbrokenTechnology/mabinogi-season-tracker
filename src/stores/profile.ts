@@ -8,6 +8,7 @@ export interface ProfileState {
   onboarded: boolean
   freeResetUsed: boolean
   notes: string
+  nightMode: boolean
 }
 
 export const useProfileStore = defineStore('profile', {
@@ -18,7 +19,8 @@ export const useProfileStore = defineStore('profile', {
     gatheringFocus: [],
     onboarded: false,
     freeResetUsed: false,
-    notes: ''
+    notes: '',
+    nightMode: false
   }),
   persist: true
 })

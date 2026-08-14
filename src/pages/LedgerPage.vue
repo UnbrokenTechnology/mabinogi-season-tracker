@@ -36,27 +36,27 @@ function fmtDate(iso: string): string { return new Date(iso).toLocaleString(unde
 </script>
 
 <template>
-  <q-page padding class="bg-dark-page">
-    <div class="text-h5 text-secondary text-weight-bold q-mb-md">Ledgers</div>
+  <q-page padding>
+    <div class="fg-display text-h4 fg-ink q-mb-md">Ledgers</div>
 
     <div class="row q-col-gutter-md">
       <!-- Keys -->
       <div class="col-12 col-lg-6">
-        <q-card flat bordered class="bg-dark">
+        <q-card flat class="fg-card">
           <q-card-section class="row items-center q-pb-xs">
             <q-icon name="key" color="secondary" size="24px" class="q-mr-sm" />
             <div class="text-subtitle1 text-weight-bold">Key Ledger</div>
             <q-space />
-            <div class="text-h5 text-secondary text-weight-bold">{{ ledger.keyBalance }}</div>
+            <div class="fg-display text-h4 fg-ink">{{ ledger.keyBalance }}</div>
           </q-card-section>
 
           <q-card-section class="q-py-xs">
-            <div class="row q-gutter-sm text-caption text-grey-5">
+            <div class="row q-gutter-sm text-caption fg-muted">
               <div v-for="p in projections" :key="p.n">
                 next {{ p.n }} eval{{ p.n > 1 ? 's' : '' }}: <b class="text-secondary">{{ p.cost }}</b> keys
               </div>
             </div>
-            <div class="text-caption text-grey-6 q-mt-xs">
+            <div class="text-caption fg-muted q-mt-xs">
               Rule: never unlock a cauldron recipe before checking this month's Iria barter list.
             </div>
           </q-card-section>
@@ -84,7 +84,7 @@ function fmtDate(iso: string): string { return new Date(iso).toLocaleString(unde
               </q-item-section>
             </q-item>
             <q-item v-if="ledger.keyTxns.length === 0">
-              <q-item-section class="text-grey-6 text-caption">No transactions yet. Keys come from daily deliveries, Association Deliveries, and Life Goals.</q-item-section>
+              <q-item-section class="fg-muted text-caption">No transactions yet. Keys come from daily deliveries, Association Deliveries, and Life Goals.</q-item-section>
             </q-item>
           </q-list>
         </q-card>
@@ -92,7 +92,7 @@ function fmtDate(iso: string): string { return new Date(iso).toLocaleString(unde
 
       <!-- Gold -->
       <div class="col-12 col-lg-6">
-        <q-card flat bordered class="bg-dark">
+        <q-card flat class="fg-card">
           <q-card-section class="row items-center q-pb-xs">
             <q-icon name="paid" color="secondary" size="24px" class="q-mr-sm" />
             <div class="text-subtitle1 text-weight-bold">Gold / Sales Ledger</div>
@@ -103,7 +103,7 @@ function fmtDate(iso: string): string { return new Date(iso).toLocaleString(unde
           </q-card-section>
 
           <q-card-section v-if="ledger.goldByItem.length" class="q-py-xs">
-            <div class="text-caption text-grey-5 q-mb-xs">Top earners:</div>
+            <div class="text-caption fg-muted q-mb-xs">Top earners:</div>
             <div class="row q-gutter-xs">
               <q-chip v-for="[item, amt] in ledger.goldByItem.slice(0, 5)" :key="item" dense square color="grey-9" text-color="secondary">
                 {{ item }}: {{ fmtGold(amt) }}g
@@ -127,7 +127,7 @@ function fmtDate(iso: string): string { return new Date(iso).toLocaleString(unde
                 <q-badge :color="t.delta > 0 ? 'positive' : 'negative'">{{ t.delta > 0 ? '+' : '' }}{{ fmtGold(t.delta) }}</q-badge>
               </q-item-section>
               <q-item-section>
-                <q-item-label>{{ t.item || '(unlabeled)' }} <span v-if="t.qty > 1" class="text-grey-6">×{{ t.qty }}</span></q-item-label>
+                <q-item-label>{{ t.item || '(unlabeled)' }} <span v-if="t.qty > 1" class="fg-muted">×{{ t.qty }}</span></q-item-label>
                 <q-item-label caption>{{ fmtDate(t.at) }}<span v-if="t.note"> — {{ t.note }}</span></q-item-label>
               </q-item-section>
               <q-item-section side>
@@ -135,7 +135,7 @@ function fmtDate(iso: string): string { return new Date(iso).toLocaleString(unde
               </q-item-section>
             </q-item>
             <q-item v-if="ledger.goldTxns.length === 0">
-              <q-item-section class="text-grey-6 text-caption">Track sales here to see which product line earns most. Revenue priority: tier-3+ barter → Seasonal Dishes → Physique Stew → rare materials.</q-item-section>
+              <q-item-section class="fg-muted text-caption">Track sales here to see which product line earns most. Revenue priority: tier-3+ barter → Seasonal Dishes → Physique Stew → rare materials.</q-item-section>
             </q-item>
           </q-list>
         </q-card>
