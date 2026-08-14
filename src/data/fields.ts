@@ -19,7 +19,7 @@ export const CRAFT_FIELDS: CraftField[] = [
     icon: 'restaurant',
     skills: 'Cooking',
     maistirProducts: [
-      'Seasonal Dishes — weekly rotating effects (incl. Combat EXP +20% weeks, which sell hardest)',
+      'Seasonal Dishes — weekly rotating effect groups (incl. Combat EXP +20% weeks, which sell hardest)',
       'Physique-Preserving Mushroom Stew — players rebirth weekly, recurring demand forever'
     ],
     pros: [
@@ -108,7 +108,7 @@ export const CRAFT_FIELDS: CraftField[] = [
       "Maistir's Polish — +3% bonus damage for melee weapons"
     ],
     pros: [
-      'Magic Craft sub-spec Lv 5 = Ether Powder — feeds ALL Equipment Tuning, NO rank required, 30-day expiry means repeat buyers',
+      'Craftworks Lv 5 (Magic Craft sub-spec) = Ether Powder — feeds ALL Equipment Tuning, NO rank required, 30-day expiry means repeat buyers',
       'Echo Marionette niche is a near-monopoly at rank',
       'Carpentry sub-spec also gathers rare materials'
     ],

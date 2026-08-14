@@ -1,7 +1,8 @@
 // Maistir path + seasonal currency guide for Lughnasadh S1.
-// Cross-referenced Aug 14 2026 from: official NA "New Life" patch notes (Aug 13),
-// Mabinogi World Wiki (several pages still Under Construction), the printed field
-// guide, and KR-server community guides. Lines follow a "Lead — detail" shape:
+// Cross-referenced Aug 14 2026 from: official NA "New Life" patch notes (Aug 13,
+// full text via Steam news API), Mabinogi World Wiki (several pages still Under
+// Construction), the raw KR Dec 11 2025 patch notice, the printed field guide, and
+// KR-server community guides. Lines follow a "Lead — detail" shape:
 // the page renders the part before the first " — " bold, the rest muted.
 
 export interface PathStep {
@@ -25,7 +26,8 @@ export const PATH_STEPS: PathStep[] = [
     title: 'Season Life Level 30 — commissions only',
     detail:
       'The 20 weekly commissions are the ONLY Season Life EXP. Week 1 ≈ Lv 21, week 2 = the Lv 30 cap. ' +
-      'Missed weeks can never be made up; coins arrive on the side.',
+      'Missed weeks can never be made up; coins arrive on the side. Never forfeit a commission — ' +
+      'forfeiting locks that commission out until next week (the weekly slot itself is not consumed).',
     note: 'Capped? Talk to Krom — extra content opens for capped players.',
     noteTone: 'green'
   },
@@ -73,12 +75,12 @@ export interface RankTier {
 export const RANK_TIERS: RankTier[] = [
   {
     rank: 'Maistir',
-    cut: 'Top 10%',
+    cut: 'Top 10% · min 20 seats',
     perks: 'Title + idle stance · Krom\'s Special Shop · Maistir recipes (Food: Seasonal Dishes + Physique Stew)'
   },
   {
     rank: 'Virtuoso',
-    cut: '10–25%',
+    cut: '10–25% · min 20 seats',
     perks: 'Title · Folla\'s Special Shop · Alban Eiler/party/weather always on · Entrusted Crafting (Blacksmithing/Tailoring)'
   },
   { rank: 'Expert', cut: '25–45%', perks: 'Title · teleport to rare gathering nodes' },
@@ -115,7 +117,8 @@ export const MAINTAIN_RULES: MaintainRule[] = [
     tone: 'gold',
     title: 'Field choice beats effort',
     text:
-      'KR verdict: "it\'s not 20%, it\'s 20 people" — most fields ran at the 20-slot floor, and cut scores ' +
+      'NA-official: Maistir AND Virtuoso each guarantee a minimum of 20 seats regardless of applicants. ' +
+      'KR verdict: "it\'s not 20%, it\'s 20 people" — most fields ran at that floor, and cut scores ' +
       'swung from under 18K to over 150K by server and cycle. Scout every cycle; hop when yours heats up.'
   },
   {
@@ -150,7 +153,8 @@ export const CURRENCIES: Currency[] = [
     source: 'na',
     tagline: 'The scarcest resource — every important unlock runs through keys, and every source is time-gated.',
     earn: [
-      'Association Deliveries — keys in the Final Payment; daily slots reset 7 AM (routine assumes ~6/day)',
+      'Association Deliveries — keys in the Final Payment; daily slots reset 7 AM (routine assumes ~6/day). ' +
+      'A bad Final Payment can be renegotiated by sacrificing one daily delivery slot',
       'Environmental events — 1 key per success, max 2/day (12:50 & 8:50 PM)',
       'Farm Expansion goals #5 / #8 / #11 — pay 1 / 3 / 5 keys',
       'KR peak route — ~7/day (49/wk) via max deliveries + Red Pear Jam; casual play earns far less'

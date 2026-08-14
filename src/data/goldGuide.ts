@@ -18,16 +18,16 @@ export const REVENUE_STREAMS: GoldStream[] = [
     title: 'Tier-3+ barter with farm output',
     icon: 'currency_exchange',
     requires: 'Taillteann Farm + unlocked cauldron recipes matching your server\'s Iria list · Commerce rank Silver 5+',
-    why: 'The high-value barter goods added this season take farm crops, Magic Cauldron crafts, and specialization items (Plates, etc.) as materials, and trade for far more valuable goods sold for Ducats AND gold. Steady, repeatable, and mostly ignores AH price competition.',
-    krNote: 'KR consensus #1 earner. The catch that burned people: unlocking recipes before reading the month\'s barter list — demands rotate the first Thursday and differ per server.'
+    why: 'The high-value barter goods added this season take farm crops, Magic Cauldron crafts, and specialization items (Plates, etc.) as materials, and trade for far more valuable goods sold for Ducats AND gold. Each good has a weekly exchange cap (resets Thu 7 AM) that throttles supply — steady, repeatable, and mostly immune to AH price competition.',
+    krNote: 'KR consensus #1 earner all season: ~3M/wk in Ducats from a casual two-slot routine, up to ~10M/wk gold+Ducats running everything. The catch that burned people: unlocking recipes before reading the month\'s barter list — demands rotate the first Thursday (randomly — a good can repeat) and differ per server.'
   },
   {
     rank: 2,
     title: 'Seasonal Dishes (Food Maistir only)',
     icon: 'restaurant',
     requires: 'Maistir rank in Food + Cooking sub-spec Lv 1 (Fresh Food)',
-    why: 'A literal monopoly: only Food Maistirs can cook them, effects rotate weekly, and buyers can filter the AH by freshness remaining. Combat EXP +20% weeks sell hardest — cook heavy those weeks.',
-    krNote: 'KR: prices spike on rotation day (Thursday), sag by the weekend. List early.'
+    why: 'A literal monopoly: only Food Maistirs can cook them, and buyers can filter the AH by freshness remaining. The effect GROUP rotates weekly and each dish rolls one of its 3 effects — Group 1 weeks (Combat EXP +20%) sell hardest, so cook heavy those weeks.',
+    krNote: 'KR: prices spike on rotation day (Thursday), sag by the weekend. List early. Later-season KR debated whether the buffs beat plain top-end dishes — treat this as a spike line, not the backbone.'
   },
   {
     rank: 3,
@@ -49,7 +49,7 @@ export const REVENUE_STREAMS: GoldStream[] = [
     rank: 5,
     title: 'Ether Powder (Equipment Tuning fuel)',
     icon: 'auto_fix_high',
-    requires: 'Craftworks → Magic Craft sub-spec Lv 5. NO rank needed.',
+    requires: 'Craftworks Lv 5 → Magic Craft sub-spec. NO rank needed.',
     why: 'Every Equipment Tuning attempt consumes it, and its 30-day expiry means nobody stockpiles — buyers come back monthly. A strong rank-free second line for mid-season.',
     krNote: 'KR: demand scales with endgame tuning meta; steady rather than spiky.'
   },
@@ -57,7 +57,7 @@ export const REVENUE_STREAMS: GoldStream[] = [
     rank: 6,
     title: 'Spec-recipe consumables & tools',
     icon: 'handyman',
-    requires: 'The matching sub-spec at Lv 5 (no rank): Potion Making, Tailoring, Weaving, Blacksmithing, Hillwen Eng.',
+    requires: 'The matching sub-spec unlocked (its tree at Lv 5, no rank): Potion Making, Tailoring, Weaving, Blacksmithing, Hillwen Eng.',
     why: 'Food Preservative (+72h freshness — every cook wants it), Gathering Gloves (+1 material incl. rares), Sturdy Tools (2× durability), Commerce Expansion Cover, Commerce Floating Stone. Several expire in 30 days = repeat buyers.',
     krNote: 'KR: Food Preservative tracks the cooking economy — if dishes sell, preservative sells.'
   },
