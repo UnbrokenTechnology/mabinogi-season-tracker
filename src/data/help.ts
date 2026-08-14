@@ -99,6 +99,15 @@ export const HELP: Record<string, HelpTopic> = {
     title: 'Season Life Goals',
     text: 'Farm challenges with escalating unlocks: 2/5/7 goals unlock Novice/Adept/Expert weekly repeat quests (they appear in your weekly checklist automatically), and 15 goals unlock Treasure Chests while harvesting (1 key to open, 300K–50M gold). Farm Expansion goals grant plots and the two Rubber Trees — grab those ASAP.'
   },
+  phases: {
+    title: 'Season phases',
+    text: "The season has an arc, and your priorities change with it: The Engine (level + basics + key income) → Specialize (one field to Lv 5, apply for Maistir) → Income (hold rank, four revenue streams) → Expand (second line, chest lottery) → Liquidate (sell everything before the Feb 4 reset). This banner tracks where you are and what matters right now."
+  },
+  almanac: {
+    title: 'The Almanac',
+    text: "Your season archive, built automatically from what you already track: each week's commissions, daily-routine completion, weekly checklist rate, key and gold flow (from ledger timestamps), and evaluation results. Nothing extra to enter — it's the same data, viewed backwards. Use it to spot slipping weeks before they become a lost cycle.",
+    links: [{ label: 'Log evals on Progress', to: '/progress' }]
+  },
   maistirHistory: {
     title: 'Evaluation history',
     text: 'Log each biweekly result (rank, field, notes on how crowded the field looked). Over a few cycles this shows whether to keep grinding your field or hop to a softer one — Dan scores persist, so field-hopping is cheap.'

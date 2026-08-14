@@ -6,6 +6,7 @@ import {
 } from '../lib/time'
 import { useCountersStore } from '../stores/counters'
 import { useProfileStore } from '../stores/profile'
+import { currentPhase, phaseProgress, PHASES } from '../data/season'
 import CountdownChip from '../components/CountdownChip.vue'
 import DeadlineRail from '../components/DeadlineRail.vue'
 import ChecklistCard from '../components/ChecklistCard.vue'
@@ -21,6 +22,8 @@ const profile = useProfileStore()
 const envNext = computed(() => nextEnvEvent(now.value))
 const envToday = computed(() => todaysEnvWindows(now.value))
 const daysToSeasonEnd = computed(() => Math.max(0, Math.ceil((SEASON_END.getTime() - now.value.getTime()) / 86400000)))
+const phase = computed(() => currentPhase(now.value))
+const phasePct = computed(() => phaseProgress(phase.value, now.value))
 </script>
 
 <template>
@@ -42,6 +45,26 @@ const daysToSeasonEnd = computed(() => Math.max(0, Math.ceil((SEASON_END.getTime
       <span class="fg-gold-badge">{{ daysToSeasonEnd }} days left · Lughnasadh S1</span>
     </div>
 
+    <!-- Season phase banner -->
+    <q-card flat class="fg-card q-mb-md overflow-hidden">
+      <q-card-section horizontal>
+        <q-card-section class="column items-center justify-center q-px-md fg-tint-green" style="min-width: 64px">
+          <div class="fg-display text-h5 text-weight-bold fg-green-text">{{ phase.num }}<span class="text-caption fg-muted">/{{ PHASES.length }}</span></div>
+          <q-icon :name="phase.icon" size="18px" class="fg-gold-text" />
+        </q-card-section>
+        <q-card-section class="col q-py-sm">
+          <div class="row items-center q-gutter-xs">
+            <span class="fg-label" style="color: var(--fg-green)">Season phase</span>
+            <span class="text-subtitle1 text-weight-bold fg-ink fg-display" style="letter-spacing: 0.06em">{{ phase.title }}</span>
+            <HelpTip topic="phases" />
+          </div>
+          <div class="text-body2 fg-ink">{{ phase.outcome }}</div>
+          <div class="text-caption fg-muted">{{ phase.focus }}</div>
+          <q-linear-progress :value="phasePct" size="4px" color="secondary" track-color="grey-4" rounded class="q-mt-xs" />
+        </q-card-section>
+      </q-card-section>
+    </q-card>
+
     <div class="row q-col-gutter-md">
       <!-- LEFT: today + week -->
       <div class="col-12 col-md-8">
@@ -49,23 +72,23 @@ const daysToSeasonEnd = computed(() => Math.max(0, Math.ceil((SEASON_END.getTime
         <div class="row q-col-gutter-sm q-mb-md">
           <div class="col-6 col-sm-3">
             <CounterControl label="Commissions / wk" icon="assignment" big help="commissions"
-              :value="counters.commissionsNow(now)" :cap="20"
-              @bump="d => counters.bump('commissions', d, now, 20)" />
+              :value="counters.valueNow('commissions', now)" :cap="20"
+              @bump="d => counters.bump('commissions', d, now)" />
           </div>
           <div class="col-6 col-sm-3">
             <CounterControl label="Deliveries" icon="local_shipping" help="deliveries"
-              :value="counters.deliveriesNow(now)" :cap="6"
-              @bump="d => counters.bump('deliveries', d, now, 6)" />
+              :value="counters.valueNow('deliveries', now)" :cap="6"
+              @bump="d => counters.bump('deliveries', d, now)" />
           </div>
           <div class="col-6 col-sm-3">
             <CounterControl label="Cheers given" icon="celebration" help="cheers"
-              :value="counters.cheersNow(now)" :cap="3"
-              @bump="d => counters.bump('cheers', d, now, 3)" />
+              :value="counters.valueNow('cheers', now)" :cap="3"
+              @bump="d => counters.bump('cheers', d, now)" />
           </div>
           <div class="col-6 col-sm-3">
             <CounterControl label="Env events" icon="eco" help="envEvents"
-              :value="counters.envEventsNow(now)" :cap="2"
-              @bump="d => counters.bump('envEventsDone', d, now, 2)" />
+              :value="counters.valueNow('envEvents', now)" :cap="2"
+              @bump="d => counters.bump('envEvents', d, now)" />
           </div>
         </div>
 
