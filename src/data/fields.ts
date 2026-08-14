@@ -25,7 +25,8 @@ export const CRAFT_FIELDS: CraftField[] = [
     pros: [
       'Two evergreen product lines with repeat buyers',
       'Cooking sub-spec Lv 1 unlocks Fresh Food, the gate for Seasonal Dishes',
-      'Maistir rank benefit: Alban Eiler (Monday) bonus always applied'
+      'Alban Eiler (Monday) bonus always applied from Virtuoso rank up',
+      'Heads-up: Food\'s evaluation score uses the Restaurant Mini-game in Tara, not a Dan test'
     ],
     cons: [
       'Usually the most popular field — hardest top-10% cut',
@@ -66,7 +67,7 @@ export const CRAFT_FIELDS: CraftField[] = [
     ],
     pros: [
       'High-value luxury items with little substitute',
-      'Entrusted Crafting benefit at rank',
+      'Entrusted Crafting (Tailoring) from Virtuoso rank up',
       'Spec recipes (no rank): Gathering Gloves (+1 material incl. rares), Commerce Expansion Cover'
     ],
     cons: [
@@ -88,7 +89,7 @@ export const CRAFT_FIELDS: CraftField[] = [
     pros: [
       'Customers in every other field (everyone needs tools)',
       'Spec recipes (no rank): Sturdy Tools (2× durability), seasonal Ingots/Plates for tier-3+ barter',
-      'Entrusted Crafting benefit at rank'
+      'Entrusted Crafting (Blacksmithing) from Virtuoso rank up'
     ],
     cons: [
       'Material-heavy; competes with established blacksmith mains',

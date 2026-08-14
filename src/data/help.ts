@@ -18,7 +18,10 @@ export const HELP: Record<string, HelpTopic> = {
   evalCycle: {
     title: 'The evaluation cycle',
     text: 'The Maistir competition runs on a 2-week treadmill: your Dan test score plus evaluation commissions decide your rank against everyone else in your field. Scoring closes at MIDNIGHT before evaluation Thursday — not 7 AM — so finish a day early. Rank lasts until the next evaluation.',
-    links: [{ label: 'Log your results on Progress', to: '/progress' }]
+    links: [
+      { label: 'Full guide on the Maistir tab', to: '/maistir' },
+      { label: 'Log your results on Progress', to: '/progress' }
+    ]
   },
   barterMonth: {
     title: 'The barter month',
@@ -61,6 +64,7 @@ export const HELP: Record<string, HelpTopic> = {
     title: 'Keys — the scarcest currency',
     text: "Almost everything important costs Life Association Keys.\n\nEARN: the 6 daily deliveries, Association Deliveries, Season Life Goals.\nSPEND: Krom's specialization evaluations (escalating ladder), Magic Cauldron recipe unlocks, Treasure Chests (1 each).\n\nThe balance comes from transactions you log; 'next eval' cost is computed from your lifetime evaluation count. Log every earn and spend so the affordability math stays honest.",
     links: [
+      { label: 'Currency guide on the Maistir tab', to: '/maistir' },
       { label: 'Full key & gold ledger', to: '/ledger' },
       { label: 'Key-cost ladder on Strategy', to: '/planner' }
     ]

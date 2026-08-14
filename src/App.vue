@@ -18,6 +18,7 @@ const tabs = [
   { to: '/planner', icon: 'alt_route', label: 'Strategy' },
   { to: '/progress', icon: 'trending_up', label: 'Progress' },
   { to: '/gold', icon: 'paid', label: 'Gold' },
+  { to: '/maistir', icon: 'workspace_premium', label: 'Maistir' },
   { to: '/almanac', icon: 'auto_stories', label: 'Almanac' },
   { to: '/ledger', icon: 'key', label: 'Ledger' },
   { to: '/settings', icon: 'settings', label: 'Settings' }
