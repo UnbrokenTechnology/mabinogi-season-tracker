@@ -12,16 +12,29 @@ const sourceLabel = {
   kr: 'KR-server verified',
   trend: 'KR trend — verify'
 } as const
+
+// "Lead — detail" lines: bold the lead, mute the detail
+function splitLine(line: string) {
+  const i = line.indexOf(' — ')
+  return i === -1 ? { lead: line, rest: '' } : { lead: line.slice(0, i), rest: line.slice(i + 3) }
+}
+
+const GLANCE = ['Register (G28)', 'Life Lv 30', '6 Basics Lv 5', 'Spec Lv 5', 'Dan + commissions', 'Rank!']
 </script>
 
 <template>
   <q-page padding>
     <div class="fg-eyebrow q-mb-xs">The biweekly treadmill · rank is rented, never owned</div>
     <div class="fg-display text-h4 fg-ink q-mb-xs">The Maistir <span class="fg-gold-text">Path</span></div>
-    <div class="text-body2 fg-muted q-mb-lg" style="max-width: 900px">
-      Everything between "new character on day one" and "holding a Maistir title every cycle" — plus the
-      currencies that pay for the trip. Ranks re-compete every two weeks, so the guide is split into
-      getting there once and staying there forever.
+    <div class="text-body2 fg-muted q-mb-md" style="max-width: 900px">
+      From day one to a held title, plus the currencies that pay for the trip.
+    </div>
+
+    <div class="row items-center q-gutter-xs q-mb-lg">
+      <template v-for="(g, i) in GLANCE" :key="g">
+        <q-icon v-if="i > 0" name="east" size="14px" class="fg-gold-text" />
+        <span class="fg-gold-badge">{{ g }}</span>
+      </template>
     </div>
 
     <div class="row q-col-gutter-lg">
@@ -123,18 +136,27 @@ const sourceLabel = {
           <q-card-section class="row q-col-gutter-md q-pb-sm">
             <div class="col-12 col-sm-6">
               <div class="fg-label q-mb-xs fg-green-text"><q-icon name="add_circle" size="13px" class="q-mr-xs" />Earn</div>
-              <div v-for="e in c.earn" :key="e" class="cur-line text-body2 fg-ink">{{ e }}</div>
+              <div v-for="e in c.earn" :key="e" class="cur-line text-body2">
+                <span class="text-weight-bold fg-ink">{{ splitLine(e).lead }}</span>
+                <span v-if="splitLine(e).rest" class="fg-muted"> — {{ splitLine(e).rest }}</span>
+              </div>
             </div>
             <div class="col-12 col-sm-6">
               <div class="fg-label q-mb-xs fg-red-text"><q-icon name="remove_circle" size="13px" class="q-mr-xs" />Spend</div>
-              <div v-for="s in c.spend" :key="s" class="cur-line text-body2 fg-ink">{{ s }}</div>
+              <div v-for="s in c.spend" :key="s" class="cur-line text-body2">
+                <span class="text-weight-bold fg-ink">{{ splitLine(s).lead }}</span>
+                <span v-if="splitLine(s).rest" class="fg-muted"> — {{ splitLine(s).rest }}</span>
+              </div>
             </div>
           </q-card-section>
           <q-card-section v-if="c.caps.length" class="q-py-sm fg-tint-gold">
             <div class="fg-label q-mb-xs" style="color: var(--fg-gold-ink)">
               <q-icon name="speed" size="13px" class="q-mr-xs" />Caps &amp; limits
             </div>
-            <div v-for="cap in c.caps" :key="cap" class="cur-line text-body2 fg-ink">{{ cap }}</div>
+            <div v-for="cap in c.caps" :key="cap" class="cur-line text-body2">
+              <span class="text-weight-bold fg-ink">{{ splitLine(cap).lead }}</span>
+              <span v-if="splitLine(cap).rest" class="fg-muted"> — {{ splitLine(cap).rest }}</span>
+            </div>
           </q-card-section>
           <q-space />
           <q-card-section v-if="c.warning" class="q-py-sm">
