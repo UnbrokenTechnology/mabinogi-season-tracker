@@ -159,8 +159,7 @@ export const CURRENCIES: Currency[] = [
       'Krom\'s evaluations — 1 key each for evals 1–10, then 2 → 3 → 5 → 10 (lifetime ladder)',
       'Cauldron recipe unlocks — 40 keys per cauldron, 160 for everything',
       'Treasure Chests — 1 key each; pays 300K / 1M / 5M / 50M gold',
-      'Hidden Commissions — 1 key for 5 EXP. A trap; skip them.',
-      'KR priority — the 1–2 recipes your build sells, then evaluations, chests last'
+      'Hidden Commissions — 1 key for 5 EXP. A trap; skip them.'
     ],
     caps: [
       'No stockpile cap — but income is throttled by daily delivery slots + 2 events/day',
@@ -252,5 +251,42 @@ export const CURRENCIES: Currency[] = [
     ],
     caps: ['Cheers — give 3 / receive 5 per day', 'Bounty — once daily; priority Rubber → Magic Cobwebs → Quartz'],
     warning: 'Don\'t burn Bounty on short-timer crops — longest-timer, one-per-harvest crops gain the most from the 80% cut.'
+  }
+]
+
+export interface PriorityRow {
+  kind: 'tier' | 'never' | 'tip'
+  label: string
+  detail: string
+}
+
+export interface SpendPriority {
+  currency: string
+  icon: string
+  rows: PriorityRow[]
+}
+
+// Tier list distilled from the KR season: what the currency is FOR, in order.
+export const SPEND_PRIORITY: SpendPriority[] = [
+  {
+    currency: 'Keys',
+    icon: 'key',
+    rows: [
+      { kind: 'tier', label: 'One field to Spec Lv 5', detail: 'evaluations while the cheap 1-key tier lasts — everything else waits' },
+      { kind: 'tier', label: 'Cauldron recipes your server demands', detail: '1–2 max, only after reading this month\'s Iria barter list' },
+      { kind: 'tier', label: 'Sub-spec & second-line evaluations', detail: 'mid-season, once rank and income are steady' },
+      { kind: 'tier', label: 'Treasure chests', detail: 'surplus keys only — never at the cost of an evaluation you needed' },
+      { kind: 'never', label: 'Never', detail: 'Hidden Commissions (1 key → 5 EXP) · shop-selling keys for 25K gold' }
+    ]
+  },
+  {
+    currency: 'Coins',
+    icon: 'toll',
+    rows: [
+      { kind: 'tier', label: 'Rare materials gating your next evaluation', detail: 'KR treats the shop as a bottleneck-breaker, not a treasury' },
+      { kind: 'tier', label: 'Barter-plate ores & gems', detail: 'Azurite / Hematite / White Lead at 400 — feeds tier-3+ barter' },
+      { kind: 'tier', label: 'Bulk basics when a commission demands them', detail: 'leathers, fabric, firewood — cheaper than gathering detours' },
+      { kind: 'tip', label: 'Buy on Wednesdays', detail: 'Alban Heruin gives 5% off every NPC shop' }
+    ]
   }
 ]

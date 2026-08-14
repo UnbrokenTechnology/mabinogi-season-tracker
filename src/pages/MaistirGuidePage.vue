@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PATH_STEPS, RANK_TIERS, MAINTAIN_RULES, CURRENCIES } from '../data/maistirGuide'
+import { PATH_STEPS, RANK_TIERS, MAINTAIN_RULES, CURRENCIES, SPEND_PRIORITY } from '../data/maistirGuide'
 
 const tone = {
   green: 'var(--fg-green)',
@@ -120,6 +120,33 @@ const GLANCE = ['Register (G28)', 'Life Lv 30', '6 Basics Lv 5', 'Spec Lv 5', 'D
       <span class="fg-section-title">Currencies &amp; Points</span>
       <span class="fg-section-side">earn · caps · spend</span>
     </div>
+
+    <!-- Spend priority tier lists -->
+    <div class="row q-col-gutter-md q-mb-md">
+      <div v-for="p in SPEND_PRIORITY" :key="p.currency" class="col-12 col-md-6">
+        <q-card flat class="fg-card overflow-hidden full-height">
+          <div class="fg-bar">
+            <q-icon :name="p.icon" size="16px" class="fg-bar-gold" />
+            <span class="fg-bar-title">{{ p.currency.split(' — ')[0] }} — <span class="fg-bar-gold">spend in this order</span></span>
+          </div>
+          <q-list separator>
+            <q-item v-for="(r, i) in p.rows" :key="r.label" class="q-py-sm">
+              <q-item-section avatar style="min-width: 40px">
+                <div v-if="r.kind === 'tier'" class="prio-num fg-display">{{ i + 1 }}</div>
+                <q-icon v-else-if="r.kind === 'never'" name="block" size="22px" class="fg-red-text" />
+                <q-icon v-else name="lightbulb" size="20px" class="fg-gold-text" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label class="text-body2 text-weight-bold"
+                              :class="r.kind === 'never' ? 'fg-red-text' : 'fg-ink'">{{ r.label }}</q-item-label>
+                <q-item-label class="text-caption fg-muted" style="line-height: 1.4">{{ r.detail }}</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-card>
+      </div>
+    </div>
+
     <div class="row q-col-gutter-md">
       <div v-for="c in CURRENCIES" :key="c.id" class="col-12 col-md-6">
         <q-card flat class="fg-card overflow-hidden full-height column">
@@ -193,6 +220,18 @@ const GLANCE = ['Register (G28)', 'Life Lv 30', '6 Basics Lv 5', 'Spec Lv 5', 'D
   align-items: center;
   justify-content: center;
   font-size: 16px;
+  font-weight: 700;
+}
+.prio-num {
+  background: var(--fg-gold);
+  color: #1c3125;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
   font-weight: 700;
 }
 .cur-line {
