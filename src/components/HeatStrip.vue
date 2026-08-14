@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { useNow } from '../lib/useNow'
 import { useTasksStore } from '../stores/tasks'
 import { gameDayYmd, addDaysYmd, ymdKey } from '../lib/time'
+import HelpTip from './HelpTip.vue'
 
 const now = useNow()
 const tasks = useTasksStore()
@@ -31,7 +32,7 @@ function cellStyle(rate: number): Record<string, string> {
 
 <template>
   <div>
-    <div class="fg-label q-mb-xs">Daily routine — last {{ DAYS }} days</div>
+    <div class="fg-label q-mb-xs">Daily routine — last {{ DAYS }} days <HelpTip topic="heatStrip" class="q-ml-xs" /></div>
     <div class="row q-gutter-xs">
       <div v-for="c in cells" :key="c.key" class="heat-cell"
            :style="{ ...cellStyle(c.rate), outline: c.isToday ? '2px solid var(--fg-gold)' : 'none' }">

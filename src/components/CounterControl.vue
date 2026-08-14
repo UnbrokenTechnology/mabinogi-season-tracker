@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import HelpTip from './HelpTip.vue'
 
 const props = defineProps<{
   label: string
@@ -7,6 +8,7 @@ const props = defineProps<{
   cap: number
   icon: string
   big?: boolean
+  help?: string
 }>()
 
 const emit = defineEmits<{ (e: 'bump', delta: number): void }>()
@@ -16,7 +18,10 @@ const full = computed(() => props.value >= props.cap)
 
 <template>
   <q-card flat class="fg-card text-center q-pa-sm counter-card">
-    <div class="fg-label q-mb-xs"><q-icon :name="icon" size="14px" class="q-mr-xs" />{{ label }}</div>
+    <div class="fg-label q-mb-xs">
+      <q-icon :name="icon" size="14px" class="q-mr-xs" />{{ label }}
+      <HelpTip v-if="help" :topic="help" class="q-ml-xs" />
+    </div>
     <q-circular-progress
       :value="cap ? (value / cap) * 100 : 0"
       :size="big ? '96px' : '80px'"

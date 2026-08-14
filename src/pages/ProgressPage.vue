@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { useProgressStore } from '../stores/progress'
 import { useProfileStore } from '../stores/profile'
 import { BASICS, CRAFT_FIELDS, GATHER_TREES } from '../data/fields'
+import HelpTip from '../components/HelpTip.vue'
 
 const progress = useProgressStore()
 const profile = useProfileStore()
@@ -33,6 +34,7 @@ const allTrees = [
           <q-card-section>
             <div class="text-subtitle1 text-weight-bold q-mb-sm">
               <q-icon name="star" color="secondary" class="q-mr-xs" />Season Life Level
+              <HelpTip topic="lifeLevel" class="q-ml-xs" />
             </div>
             <div class="row items-center q-gutter-md">
               <div class="text-h3 text-secondary text-weight-bold">{{ progress.lifeLevel }}</div>
@@ -49,6 +51,7 @@ const allTrees = [
             <div class="row items-center q-mb-sm">
               <div class="text-subtitle1 text-weight-bold">
                 <q-icon name="foundation" color="primary" class="q-mr-xs" />Basic Expertise
+                <HelpTip topic="basics" class="q-ml-xs" />
               </div>
               <q-space />
               <q-badge :color="progress.basicsGateMet ? 'positive' : 'grey-8'">
@@ -74,6 +77,7 @@ const allTrees = [
           <q-card-section>
             <div class="text-subtitle1 text-weight-bold q-mb-sm">
               <q-icon name="alt_route" color="primary" class="q-mr-xs" />Specializations
+              <HelpTip topic="specs" class="q-ml-xs" />
             </div>
             <div v-for="t in allTrees" :key="t.id" class="row items-center q-mb-xs"
                  :class="profile.primaryField === t.id ? 'text-secondary' : ''">
@@ -101,6 +105,7 @@ const allTrees = [
           <q-card-section>
             <div class="text-subtitle1 text-weight-bold q-mb-sm">
               <q-icon name="flag" color="primary" class="q-mr-xs" />Season Life Goals
+              <HelpTip topic="lifeGoals" class="q-ml-xs" />
             </div>
             <div class="row items-center q-gutter-sm q-mb-sm">
               <q-btn dense size="sm" outline icon="remove" :disable="progress.lifeGoals <= 0" @click="progress.lifeGoals--" />
@@ -136,6 +141,7 @@ const allTrees = [
           <q-card-section>
             <div class="text-subtitle1 text-weight-bold q-mb-sm">
               <q-icon name="military_tech" color="secondary" class="q-mr-xs" />Maistir Evaluations
+              <HelpTip topic="maistirHistory" class="q-ml-xs" />
             </div>
             <div class="row q-col-gutter-xs q-mb-sm">
               <div class="col-4"><q-input v-model="newRecord.date" dense outlined type="date" label="Date" /></div>

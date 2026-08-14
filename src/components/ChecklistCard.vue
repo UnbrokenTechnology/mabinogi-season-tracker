@@ -3,12 +3,14 @@ import { ref, computed } from 'vue'
 import type { Cadence } from '../data/tasks'
 import { useTasksStore } from '../stores/tasks'
 import { useNow } from '../lib/useNow'
+import HelpTip from './HelpTip.vue'
 
 const props = defineProps<{
   cadence: Cadence
   title: string
   icon: string
   accent?: 'green' | 'gold' | 'red'
+  help?: string
 }>()
 
 const tasks = useTasksStore()
@@ -32,6 +34,7 @@ function addTask() {
     <div class="fg-bar">
       <q-icon :name="icon" size="16px" :style="{ color: 'var(--fg-gold)' }" />
       <span class="fg-bar-title">{{ title }}</span>
+      <HelpTip v-if="help" light :topic="help" />
       <q-space />
       <span class="fg-bar-title" :class="doneCount === list.length && list.length > 0 ? '' : 'fg-bar-gold'"
             :style="doneCount === list.length && list.length > 0 ? 'color: #9fc79a' : ''">
@@ -63,6 +66,7 @@ function addTask() {
         <q-item-section>
           <q-item-label class="text-weight-bold" :class="tasks.isDone(t.id, cadence, now) ? 'fg-strike' : 'fg-ink'">
             {{ t.title }}
+            <HelpTip v-if="'help' in t && t.help" :topic="t.help" class="q-ml-xs" />
           </q-item-label>
           <q-item-label v-if="t.detail" caption class="fg-muted">{{ t.detail }}</q-item-label>
         </q-item-section>

@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useLedgerStore, type KeyCategory } from '../stores/ledger'
 import { useProgressStore } from '../stores/progress'
+import HelpTip from './HelpTip.vue'
 
 const ledger = useLedgerStore()
 const progress = useProgressStore()
@@ -20,6 +21,7 @@ function quickAdd(sign: 1 | -1, category: KeyCategory) {
     <div class="fg-bar">
       <q-icon name="key" size="16px" :style="{ color: 'var(--fg-gold)' }" />
       <span class="fg-bar-title">Life Association Keys</span>
+      <HelpTip light topic="keys" />
       <q-space />
       <span class="fg-display text-h5 text-weight-bold" :style="{ color: 'var(--fg-gold)' }">{{ ledger.keyBalance }}</span>
     </div>

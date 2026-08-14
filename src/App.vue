@@ -17,6 +17,7 @@ const tabs = [
   { to: '/', icon: 'dashboard', label: 'Dashboard' },
   { to: '/planner', icon: 'alt_route', label: 'Strategy' },
   { to: '/progress', icon: 'trending_up', label: 'Progress' },
+  { to: '/gold', icon: 'paid', label: 'Gold' },
   { to: '/ledger', icon: 'key', label: 'Ledger' },
   { to: '/settings', icon: 'settings', label: 'Settings' }
 ]

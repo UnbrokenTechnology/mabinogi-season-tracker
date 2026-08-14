@@ -16,6 +16,7 @@ export interface TaskTemplate {
   detail?: string
   sort: number
   cond?: TaskCondition
+  help?: string      // key into HELP (src/data/help.ts) for a per-task explainer
 }
 
 export const TASK_TEMPLATES: TaskTemplate[] = [
@@ -36,7 +37,7 @@ export const TASK_TEMPLATES: TaskTemplate[] = [
   { id: 'w-seasonal-dish', cadence: 'weekly', sort: 6, title: "Cook this week's Seasonal Dishes", cond: { primaryField: ['food'] }, detail: 'Check Life Guide → Seasonal Info for the 10 ingredients + active effect group. Combat EXP +20% weeks sell hardest. Requires Maistir rank + Cooking sub-spec Lv 1 (Fresh Food).' },
   { id: 'w-stew', cadence: 'weekly', sort: 7, title: 'Restock Physique-Preserving Stew', cond: { primaryField: ['food'] }, detail: 'Players rebirth weekly — recurring demand.' },
   { id: 'w-craft-line', cadence: 'weekly', sort: 6, title: 'Batch-craft your Maistir/spec product line', cond: { primaryField: ['medicine', 'textiles', 'metalworking', 'craftworks'] }, detail: 'Craft and list your field\'s rank/spec products while bonuses apply (Maistir: Monday/party/weather bonuses always on).' },
-  { id: 'w-barter', cadence: 'weekly', sort: 8, title: 'Run tier-3+ barter', detail: 'Cauldron goods + Plates (Azurite/Hematite/White Lead). This is the main gold engine.' },
+  { id: 'w-barter', cadence: 'weekly', sort: 8, title: 'Run tier-3+ barter', detail: 'Cauldron goods + Plates (Azurite/Hematite/White Lead). This is the main gold engine.', help: 'barterTiers' },
   { id: 'w-rares', cadence: 'weekly', sort: 9, title: 'Gather rare materials on schedule', cond: { basicsGate: true }, detail: 'Life Guide → Rare Gathering Times auto-paths you. Sub-spec level = success rate.' },
 
   // ---- biweekly (evaluation cycle, anchored Aug 27) ----

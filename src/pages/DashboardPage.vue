@@ -12,6 +12,7 @@ import ChecklistCard from '../components/ChecklistCard.vue'
 import CounterControl from '../components/CounterControl.vue'
 import HeatStrip from '../components/HeatStrip.vue'
 import KeyLedgerWidget from '../components/KeyLedgerWidget.vue'
+import HelpTip from '../components/HelpTip.vue'
 
 const now = useNow()
 const counters = useCountersStore()
@@ -47,22 +48,22 @@ const daysToSeasonEnd = computed(() => Math.max(0, Math.ceil((SEASON_END.getTime
         <!-- Counters -->
         <div class="row q-col-gutter-sm q-mb-md">
           <div class="col-6 col-sm-3">
-            <CounterControl label="Commissions / wk" icon="assignment" big
+            <CounterControl label="Commissions / wk" icon="assignment" big help="commissions"
               :value="counters.commissionsNow(now)" :cap="20"
               @bump="d => counters.bump('commissions', d, now, 20)" />
           </div>
           <div class="col-6 col-sm-3">
-            <CounterControl label="Deliveries" icon="local_shipping"
+            <CounterControl label="Deliveries" icon="local_shipping" help="deliveries"
               :value="counters.deliveriesNow(now)" :cap="6"
               @bump="d => counters.bump('deliveries', d, now, 6)" />
           </div>
           <div class="col-6 col-sm-3">
-            <CounterControl label="Cheers given" icon="celebration"
+            <CounterControl label="Cheers given" icon="celebration" help="cheers"
               :value="counters.cheersNow(now)" :cap="3"
               @bump="d => counters.bump('cheers', d, now, 3)" />
           </div>
           <div class="col-6 col-sm-3">
-            <CounterControl label="Env events" icon="eco"
+            <CounterControl label="Env events" icon="eco" help="envEvents"
               :value="counters.envEventsNow(now)" :cap="2"
               @bump="d => counters.bump('envEventsDone', d, now, 2)" />
           </div>
@@ -75,6 +76,7 @@ const daysToSeasonEnd = computed(() => Math.max(0, Math.ceil((SEASON_END.getTime
             label="Bounty spent today (refills 7 AM server)"
             @update:model-value="counters.toggleBounty(now)"
           />
+          <HelpTip topic="bounty" />
           <div class="text-caption fg-muted">
             Today's windows:
             <span v-for="w in envToday" :key="w.label" class="q-ml-sm text-weight-bold"
@@ -86,15 +88,15 @@ const daysToSeasonEnd = computed(() => Math.max(0, Math.ceil((SEASON_END.getTime
 
         <div class="row q-col-gutter-md">
           <div class="col-12 col-lg-6">
-            <ChecklistCard cadence="daily" title="Today · Daily Loop" icon="today" />
+            <ChecklistCard cadence="daily" title="Today · Daily Loop" icon="today" help="today" />
           </div>
           <div class="col-12 col-lg-6">
-            <ChecklistCard cadence="weekly" title="This Week · Thursdays" icon="date_range" />
+            <ChecklistCard cadence="weekly" title="This Week · Thursdays" icon="date_range" help="week" />
             <div class="q-mt-md">
-              <ChecklistCard cadence="biweekly" title="This Eval Cycle" icon="military_tech" />
+              <ChecklistCard cadence="biweekly" title="This Eval Cycle" icon="military_tech" help="evalCycle" />
             </div>
             <div class="q-mt-md">
-              <ChecklistCard cadence="monthly" title="This Barter Month" icon="currency_exchange" />
+              <ChecklistCard cadence="monthly" title="This Barter Month" icon="currency_exchange" help="barterMonth" />
             </div>
           </div>
         </div>

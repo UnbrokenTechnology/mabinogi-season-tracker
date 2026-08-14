@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue'
 import { useLedgerStore, type KeyCategory } from '../stores/ledger'
 import { useProgressStore } from '../stores/progress'
+import HelpTip from '../components/HelpTip.vue'
 
 const ledger = useLedgerStore()
 const progress = useProgressStore()
@@ -46,6 +47,7 @@ function fmtDate(iso: string): string { return new Date(iso).toLocaleString(unde
           <q-card-section class="row items-center q-pb-xs">
             <q-icon name="key" color="secondary" size="24px" class="q-mr-sm" />
             <div class="text-subtitle1 text-weight-bold">Key Ledger</div>
+            <HelpTip topic="keyLedger" class="q-ml-sm" />
             <q-space />
             <div class="fg-display text-h4 fg-ink">{{ ledger.keyBalance }}</div>
           </q-card-section>
@@ -96,6 +98,7 @@ function fmtDate(iso: string): string { return new Date(iso).toLocaleString(unde
           <q-card-section class="row items-center q-pb-xs">
             <q-icon name="paid" color="secondary" size="24px" class="q-mr-sm" />
             <div class="text-subtitle1 text-weight-bold">Gold / Sales Ledger</div>
+            <HelpTip topic="goldLedger" class="q-ml-sm" />
             <q-space />
             <div class="text-h5 text-weight-bold" :class="ledger.goldBalance >= 0 ? 'text-secondary' : 'text-negative'">
               {{ fmtGold(ledger.goldBalance) }}g

@@ -5,6 +5,7 @@ import {
   nextScoringCutoff, nextEvalResolve, nextBarterRotation, nextWeeklyReset,
   nextDailyReset, SEASON_END, formatDuration, formatInZone, urgency, SERVER_TZ
 } from '../lib/time'
+import HelpTip from './HelpTip.vue'
 
 const now = useNow()
 const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone
@@ -43,6 +44,7 @@ const liquidate = computed(() => now.value >= new Date('2027-01-15T08:00:00Z'))
     <div class="fg-bar">
       <q-icon name="alarm" size="16px" :style="{ color: 'var(--fg-gold)' }" />
       <span class="fg-bar-title">The Clock — Memorize These</span>
+      <HelpTip light topic="clock" />
       <q-space />
       <span class="fg-bar-title fg-bar-gold">Server Time</span>
     </div>
