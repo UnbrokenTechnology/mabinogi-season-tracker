@@ -2,8 +2,8 @@
 import { computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useQuasar, copyToClipboard } from 'quasar'
-import { FARM_MATERIALS, CAULDRONS, RECIPES, type CauldronRecipe } from '../data/cauldron'
-import { craftCost, craftProfit, byProfitDesc } from '../lib/market'
+import { FARM_MATERIALS, CAULDRONS, RECIPES, PLOT_LABELS, type CauldronRecipe, type PlotKind, type FarmMaterial } from '../data/cauldron'
+import { craftCost, craftProfit, byProfitDesc, materialBestUse, type MaterialValue } from '../lib/market'
 import { encodePrices, decodePrices, sharedPriceCount } from '../lib/share'
 import { useMarketStore } from '../stores/market'
 import HelpTip from '../components/HelpTip.vue'
@@ -79,6 +79,41 @@ const totalPrices = FARM_MATERIALS.length + RECIPES.length
 
 const materialLabel = (id: string) => FARM_MATERIALS.find(m => m.id === id)?.label ?? id
 const ingredientText = (r: CauldronRecipe) => r.inputs.map(i => `${materialLabel(i.materialId)} ×${i.qty}`).join(' · ')
+
+// ---- farm planner: best use per material + gold per plot-hour ----
+
+const bestUse = computed(() => {
+  const map: Record<string, MaterialValue | null> = {}
+  for (const m of FARM_MATERIALS) map[m.id] = materialBestUse(m, market.prices, market.feePct)
+  return map
+})
+
+const fieldCrops = FARM_MATERIALS.filter(m => m.plot === 'field')
+const fixedCrops = FARM_MATERIALS.filter(m => m.plot !== 'field')
+const PLOT_KINDS = Object.keys(PLOT_LABELS) as PlotKind[]
+
+interface PlannerRow { m: FarmMaterial; v: MaterialValue | null }
+const fieldRank = computed<PlannerRow[]>(() =>
+  fieldCrops.map(m => ({ m, v: bestUse.value[m.id] }))
+    .sort((a, b) => byProfitDesc(a.v?.perPlotHour ?? null, b.v?.perPlotHour ?? null))
+)
+const fixedRows = computed<PlannerRow[]>(() => fixedCrops.map(m => ({ m, v: bestUse.value[m.id] })))
+
+const farmPerHour = computed(() => {
+  let total = 0
+  let missing = false
+  let any = false
+  const top = fieldRank.value[0]
+  if (top?.v) { total += market.plots.field * top.v.perPlotHour; any = true } else missing = true
+  for (const row of fixedRows.value) {
+    if (row.v) { total += (market.plots[row.m.plot] ?? 0) * row.v.perPlotHour; any = true }
+    else if ((market.plots[row.m.plot] ?? 0) > 0) missing = true
+  }
+  return { total, missing, any }
+})
+
+const useText = (v: MaterialValue) =>
+  v.use === 'raw' ? 'sell raw' : `craft ${RECIPES.find(r => r.id === v.use)?.label ?? v.use}`
 
 function fmtGold(n: number): string { return Math.round(n).toLocaleString() }
 function profitClass(p: number | null): string {
@@ -188,6 +223,80 @@ const updatedText = computed(() => market.updatedAt
               </q-btn>
               <q-btn flat dense size="sm" color="negative" icon="backspace" label="Clear all"
                      :disable="pricedCount === 0" @click="market.clearPrices()" />
+            </div>
+          </q-card-section>
+        </q-card>
+
+        <!-- Farm planner -->
+        <q-card flat class="fg-card q-mt-md">
+          <div class="fg-bar">
+            <q-icon name="agriculture" class="fg-bar-gold" size="18px" />
+            <span class="fg-bar-title">Farm Planner</span>
+            <HelpTip topic="farmPlanner" light class="q-ml-xs" />
+          </div>
+
+          <q-card-section class="q-py-sm">
+            <div class="fg-label q-mb-xs">Your plots</div>
+            <div class="row q-col-gutter-xs">
+              <div v-for="kind in PLOT_KINDS" :key="kind" class="col-4">
+                <q-input dense outlined type="number" :min="0" :max="99"
+                         :label="PLOT_LABELS[kind]"
+                         :model-value="market.plots[kind]"
+                         @update:model-value="v => market.setPlot(kind, v as number | string | null)" />
+              </div>
+            </div>
+          </q-card-section>
+          <q-separator />
+
+          <q-card-section class="q-py-sm">
+            <div class="fg-label q-mb-xs">Plant on your {{ market.plots.field }} fields</div>
+            <div v-if="!fieldRank[0]?.v" class="text-caption fg-muted">
+              Needs prices — a field crop ranks once its raw price or one of its recipes is fully priced.
+            </div>
+            <div v-for="(row, i) in fieldRank" :key="row.m.id" class="row items-center q-py-xs"
+                 :class="i === 0 && row.v ? 'fg-tint-gold rounded-borders q-px-sm' : 'q-px-sm'">
+              <div class="col">
+                <span class="text-weight-bold fg-ink">{{ row.m.label }}</span>
+                <span v-if="i === 0 && row.v" class="fg-gold-badge q-ml-sm" style="font-size: 9px">plant this</span>
+                <div class="text-caption fg-muted">
+                  {{ row.m.growMinutes }} min grow<template v-if="row.v"> · {{ useText(row.v) }}</template>
+                </div>
+              </div>
+              <div class="col-auto text-right text-weight-bold" :class="row.v ? 'fg-green-text' : 'fg-muted'">
+                {{ row.v ? fmtGold(row.v.perPlotHour) + 'g' : '—' }}
+                <div class="text-caption fg-muted" style="font-weight: 400">per plot · hr</div>
+              </div>
+            </div>
+          </q-card-section>
+          <q-separator />
+
+          <q-card-section class="q-py-sm">
+            <div class="fg-label q-mb-xs">Fixed plots</div>
+            <div v-for="row in fixedRows" :key="row.m.id" class="row items-center q-py-xs q-px-sm">
+              <div class="col">
+                <span class="text-weight-bold fg-ink">{{ row.m.label }}</span>
+                <span class="text-caption fg-muted q-ml-xs">×{{ market.plots[row.m.plot] }}</span>
+                <div class="text-caption fg-muted">
+                  {{ row.m.growMinutes }} min grow<template v-if="row.v"> · {{ useText(row.v) }}</template>
+                </div>
+              </div>
+              <div class="col-auto text-right text-weight-bold" :class="row.v ? 'fg-green-text' : 'fg-muted'">
+                {{ row.v ? fmtGold(row.v.perPlotHour * (market.plots[row.m.plot] ?? 0)) + 'g' : '—' }}
+                <div class="text-caption fg-muted" style="font-weight: 400">all {{ market.plots[row.m.plot] }} · hr</div>
+              </div>
+            </div>
+          </q-card-section>
+          <q-separator />
+
+          <q-card-section class="q-py-sm">
+            <div v-if="farmPerHour.any" class="text-subtitle2 fg-ink">
+              Whole farm ≈ <b class="fg-green-text">{{ fmtGold(farmPerHour.total) }}g / active hour</b>
+              <span v-if="farmPerHour.missing" class="text-caption fg-muted"> (some plots unpriced)</span>
+            </div>
+            <div v-else class="text-caption fg-muted">Enter prices to see what an hour of farming is worth.</div>
+            <div class="text-caption fg-muted q-mt-xs">
+              Assumes ×1 yield, instant replanting, no Bounty (Bounty cuts grow time 80% — spend it on the
+              longest timers). Craft with Commons: quality doesn't affect cauldron output.
             </div>
           </q-card-section>
         </q-card>

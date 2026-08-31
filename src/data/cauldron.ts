@@ -5,20 +5,35 @@
 // Data template (raw wikitext, fetched Aug 30 2026). Cross-check: unlock keys per
 // cauldron sum to 0+5+8+12+15 = 40, matching the known 40-keys-per-cauldron figure.
 
+// Plot kinds: only the three Field crops compete for the same plots — every other
+// material grows on a dedicated plot that can produce nothing else.
+export type PlotKind = 'field' | 'red-pear-tree' | 'rubber-tree' | 'quartz-vein' | 'cobweb-stump'
+
 export interface FarmMaterial {
   id: string
   label: string
+  plot: PlotKind
+  growMinutes: number   // cultivation time without Bounty (Bounty cuts it 80%)
 }
 
+// Grow times from the wiki's Taillteann Farm cultivation table (fetched Aug 30 2026).
 export const FARM_MATERIALS: FarmMaterial[] = [
-  { id: 'jasmine', label: 'Jasmine' },
-  { id: 'blackberry', label: 'Blackberry' },
-  { id: 'red-pear', label: 'Red Pear' },
-  { id: 'okra', label: 'Okra' },
-  { id: 'quartz', label: 'Quartz' },
-  { id: 'rubber', label: 'Rubber' },
-  { id: 'magic-cobweb', label: 'Magic Cobweb' }
+  { id: 'jasmine', label: 'Jasmine', plot: 'field', growMinutes: 31.5 },
+  { id: 'blackberry', label: 'Blackberry', plot: 'field', growMinutes: 12 },
+  { id: 'red-pear', label: 'Red Pear', plot: 'red-pear-tree', growMinutes: 21.5 },
+  { id: 'okra', label: 'Okra', plot: 'field', growMinutes: 18 },
+  { id: 'quartz', label: 'Quartz', plot: 'quartz-vein', growMinutes: 18 },
+  { id: 'rubber', label: 'Rubber', plot: 'rubber-tree', growMinutes: 24 },
+  { id: 'magic-cobweb', label: 'Magic Cobweb', plot: 'cobweb-stump', growMinutes: 16.5 }
 ]
+
+export const PLOT_LABELS: Record<PlotKind, string> = {
+  field: 'Fields',
+  'red-pear-tree': 'Red Pear Trees',
+  'rubber-tree': 'Rubber Trees',
+  'quartz-vein': 'Quartz Veins',
+  'cobweb-stump': 'Cobweb Stumps'
+}
 
 export type CauldronId = 'abundance' | 'brilliance' | 'delicacy' | 'tenderness'
 

@@ -130,5 +130,9 @@ export const HELP: Record<string, HelpTopic> = {
   marketFee: {
     title: 'Auction House fee',
     text: 'The cut the Auction House takes from a completed sale — 4% on NA. It comes off the SELL side only: profit = sell × 0.96 − materials. Adjust here if the rate ever changes.'
+  },
+  farmPlanner: {
+    title: 'Gold per plot-hour',
+    text: "Each material's value per unit = the better of selling it raw (net of the AH fee) or feeding it into its best recipe (net sale minus the other ingredients at your prices, split across the units it consumes). Divide by grow time → gold per plot-hour.\n\nOnly Jasmine, Okra and Blackberry compete for Fields — every other plot grows exactly one thing, so its only question is what to do with the harvest. Grow times are wiki-verified; plot counts are yours to edit as Farm Expansion goals add more."
   }
 }
