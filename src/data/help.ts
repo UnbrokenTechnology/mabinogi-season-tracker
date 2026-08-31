@@ -125,7 +125,7 @@ export const HELP: Record<string, HelpTopic> = {
   },
   marketMaterials: {
     title: 'Enter each price once',
-    text: "One price per farm material, straight from the Auction House. Every recipe using that material updates instantly — Blackberry feeds 7 different recipes, so one edit re-ranks all of them.\n\nIf you grow your own materials the math still holds: crafting consumes a unit you could otherwise have sold, so its AH price is still what the craft costs you."
+    text: "One price per farm material, straight from the Auction House. Every recipe using that material updates instantly — Blackberry feeds 7 different recipes, so one edit re-ranks all of them.\n\nIf you grow your own materials the math still holds: crafting consumes a unit you could otherwise have sold, so its AH price is still what the craft costs you.\n\nShare link copies a URL carrying every price on the page — send it to your household and they get offered your sheet. Whoever checked the AH last shares back."
   },
   marketFee: {
     title: 'Auction House fee',

@@ -1,11 +1,49 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useQuasar, copyToClipboard } from 'quasar'
 import { FARM_MATERIALS, CAULDRONS, RECIPES, type CauldronRecipe } from '../data/cauldron'
 import { craftCost, craftProfit, byProfitDesc } from '../lib/market'
+import { encodePrices, decodePrices, sharedPriceCount } from '../lib/share'
 import { useMarketStore } from '../stores/market'
 import HelpTip from '../components/HelpTip.vue'
 
 const market = useMarketStore()
+const $q = useQuasar()
+const route = useRoute()
+const router = useRouter()
+
+function sharePrices() {
+  const code = encodePrices(market.prices, market.feePct)
+  const url = `${location.origin}${location.pathname}#/market?p=${code}`
+  copyToClipboard(url)
+    .then(() => $q.notify({ message: 'Share link copied — anyone opening it is offered your prices.', color: 'positive', icon: 'link' }))
+    .catch(() => $q.dialog({ title: 'Share these prices', message: `Copy this link:\n\n${url}`, ok: { label: 'Done', color: 'primary' } }))
+}
+
+// watch (not onMounted) so a share link pasted into an already-open tab imports too.
+// The query must be stripped BEFORE the dialog opens: Quasar dialogs dismiss on
+// route change, so a replace issued after $q.dialog() closes it instantly.
+watch(() => route.query.p, async code => {
+  if (typeof code !== 'string') return
+  const shared = decodePrices(code)
+  await router.replace({ query: {} })
+  if (!shared) {
+    $q.notify({ message: "That share link couldn't be read — ask for a fresh one.", color: 'negative', icon: 'link_off' })
+    return
+  }
+  const n = sharedPriceCount(shared)
+  $q.dialog({
+    title: 'Shared price sheet',
+    message: `This link carries ${n} price${n === 1 ? '' : 's'} (AH fee ${shared.feePct}%). Apply them? They overwrite your entries for those items; prices only you have entered are kept.`,
+    cancel: true,
+    ok: { label: 'Apply prices', color: 'primary' },
+    noRouteDismiss: true   // the link's ?p= query is stripped while the dialog is open
+  }).onOk(() => {
+    market.applyShared(shared.prices, shared.feePct)
+    $q.notify({ message: `${n} shared price${n === 1 ? '' : 's'} applied.`, color: 'positive', icon: 'check' })
+  })
+}, { immediate: true })
 
 interface Row {
   recipe: CauldronRecipe
@@ -144,6 +182,10 @@ const updatedText = computed(() => market.updatedAt
                 <template v-else>No prices entered yet</template>
               </div>
               <q-space />
+              <q-btn flat dense size="sm" color="primary" icon="ios_share" label="Share link"
+                     :disable="pricedCount === 0" @click="sharePrices">
+                <q-tooltip>Copy a link that carries every price on this page</q-tooltip>
+              </q-btn>
               <q-btn flat dense size="sm" color="negative" icon="backspace" label="Clear all"
                      :disable="pricedCount === 0" @click="market.clearPrices()" />
             </div>

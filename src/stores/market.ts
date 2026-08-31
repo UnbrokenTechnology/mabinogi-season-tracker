@@ -19,6 +19,15 @@ export const useMarketStore = defineStore('market', {
     clearPrices() {
       this.prices = {}
       this.updatedAt = null
+    },
+    // Apply prices from a share link: entries the link carries overwrite, ids the
+    // sender left blank keep whatever the receiver already had.
+    applyShared(shared: Record<string, number | null>, feePct?: number) {
+      for (const [id, v] of Object.entries(shared)) {
+        if (v != null) this.prices[id] = v
+      }
+      if (feePct != null) this.feePct = feePct
+      this.updatedAt = new Date().toISOString()
     }
   },
   persist: true
