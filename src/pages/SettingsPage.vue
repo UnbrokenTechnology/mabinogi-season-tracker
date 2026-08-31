@@ -5,6 +5,7 @@ import { useProgressStore } from '../stores/progress'
 import { useCountersStore } from '../stores/counters'
 import { useTasksStore } from '../stores/tasks'
 import { useLedgerStore } from '../stores/ledger'
+import { useMarketStore } from '../stores/market'
 import { SERVER_TZ } from '../lib/time'
 
 const $q = useQuasar()
@@ -13,7 +14,8 @@ const stores = {
   progress: useProgressStore(),
   counters: useCountersStore(),
   tasks: useTasksStore(),
-  ledger: useLedgerStore()
+  ledger: useLedgerStore(),
+  market: useMarketStore()
 }
 
 function exportJson() {

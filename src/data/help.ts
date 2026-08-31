@@ -115,5 +115,20 @@ export const HELP: Record<string, HelpTopic> = {
   maistirHistory: {
     title: 'Evaluation history',
     text: 'Log each biweekly result (rank, field, notes on how crowded the field looked). Over a few cycles this shows whether to keep grinding your field or hop to a softer one — Dan scores persist, so field-hopping is cheap.'
+  },
+
+  // ---- market page ----
+  market: {
+    title: 'How the ranking works',
+    text: "For each of the 20 cauldron recipes: profit = sell price minus the AH fee, minus the cost of buying its ingredients at your entered prices. The best row per cauldron and the best overall float to the top.\n\nPrices swing hard between servers and weeks — re-check the AH before committing a big crafting session, and remember recipe unlock keys are a sunk cost the per-craft number deliberately ignores.",
+    links: [{ label: 'Log the sales in the Ledger', to: '/ledger' }]
+  },
+  marketMaterials: {
+    title: 'Enter each price once',
+    text: "One price per farm material, straight from the Auction House. Every recipe using that material updates instantly — Blackberry feeds 7 different recipes, so one edit re-ranks all of them.\n\nIf you grow your own materials the math still holds: crafting consumes a unit you could otherwise have sold, so its AH price is still what the craft costs you."
+  },
+  marketFee: {
+    title: 'Auction House fee',
+    text: 'The cut the Auction House takes from a completed sale — 4% on NA. It comes off the SELL side only: profit = sell × 0.96 − materials. Adjust here if the rate ever changes.'
   }
 }
