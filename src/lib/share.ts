@@ -8,7 +8,13 @@ import { FARM_MATERIALS, RECIPES } from '../data/cauldron'
 import type { PriceMap } from './market'
 
 const IDS = [...FARM_MATERIALS.map(m => m.id), ...RECIPES.map(r => r.id)]
-const VERSION = '1'
+const VERSION = '2'
+
+// v1 links were minted before FARM_MATERIALS was reordered to match the farm layout;
+// they still decode against this frozen copy of the original material order.
+const V1_MATERIAL_IDS = ['jasmine', 'blackberry', 'red-pear', 'okra', 'quartz', 'rubber', 'magic-cobweb']
+const V1_IDS = [...V1_MATERIAL_IDS, ...RECIPES.map(r => r.id)]
+const IDS_BY_VERSION: Record<string, string[]> = { '1': V1_IDS, [VERSION]: IDS }
 
 export function encodePrices(prices: PriceMap, feePct: number): string {
   const vals = IDS.map(id => {
@@ -25,11 +31,12 @@ export interface SharedPrices {
 
 export function decodePrices(code: string): SharedPrices | null {
   const parts = code.split('_')
-  if (parts.length !== IDS.length + 2 || parts[0] !== VERSION) return null
+  const ids = IDS_BY_VERSION[parts[0]]
+  if (!ids || parts.length !== ids.length + 2) return null
   const feePct = Number(parts[1])
   if (Number.isNaN(feePct) || feePct < 0 || feePct > 100) return null
   const prices: Record<string, number | null> = {}
-  IDS.forEach((id, i) => {
+  ids.forEach((id, i) => {
     const raw = parts[i + 2]
     if (raw === '') {
       prices[id] = null

@@ -17,13 +17,16 @@ export interface FarmMaterial {
 }
 
 // Grow times from the wiki's Taillteann Farm cultivation table (fetched Aug 30 2026).
+// Ordered to match the farm layout: the 3 field crops, then trees, then vein/stump.
+// NOTE: share.ts encodes prices positionally — changing this order requires a share
+// VERSION bump there (v1 decodes against its own frozen copy of the old order).
 export const FARM_MATERIALS: FarmMaterial[] = [
-  { id: 'jasmine', label: 'Jasmine', plot: 'field', growMinutes: 31.5 },
   { id: 'blackberry', label: 'Blackberry', plot: 'field', growMinutes: 12 },
-  { id: 'red-pear', label: 'Red Pear', plot: 'red-pear-tree', growMinutes: 21.5 },
   { id: 'okra', label: 'Okra', plot: 'field', growMinutes: 18 },
-  { id: 'quartz', label: 'Quartz', plot: 'quartz-vein', growMinutes: 18 },
+  { id: 'jasmine', label: 'Jasmine', plot: 'field', growMinutes: 31.5 },
+  { id: 'red-pear', label: 'Red Pear', plot: 'red-pear-tree', growMinutes: 21.5 },
   { id: 'rubber', label: 'Rubber', plot: 'rubber-tree', growMinutes: 24 },
+  { id: 'quartz', label: 'Quartz', plot: 'quartz-vein', growMinutes: 18 },
   { id: 'magic-cobweb', label: 'Magic Cobweb', plot: 'cobweb-stump', growMinutes: 16.5 }
 ]
 
