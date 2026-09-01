@@ -230,8 +230,10 @@ const updatedText = computed(() => market.updatedAt
                      :disable="pricedCount === 0" @click="sharePrices">
                 <q-tooltip>Copy a link that carries every price on this page</q-tooltip>
               </q-btn>
-              <q-btn flat dense size="sm" color="negative" icon="backspace" label="Clear all"
-                     :disable="pricedCount === 0" @click="market.clearPrices()" />
+              <q-btn v-if="market.clearedBackup && pricedCount === 0" flat dense size="sm" color="secondary"
+                     icon="restore" label="Restore" @click="market.restoreCleared()">
+                <q-tooltip>Bring back the prices from the last clear</q-tooltip>
+              </q-btn>
             </div>
           </q-card-section>
         </q-card>

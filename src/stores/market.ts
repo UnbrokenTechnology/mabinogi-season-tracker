@@ -8,6 +8,7 @@ interface MarketState {
   feePct: number          // AH cut taken from a completed sale (NA: 4%)
   updatedAt: string | null
   plots: Record<PlotKind, number>   // this player's farm layout; Farm Expansion goals add more
+  clearedBackup: Record<string, number | null> | null   // safety copy from the last Clear all
 }
 
 export const useMarketStore = defineStore('market', {
@@ -15,7 +16,8 @@ export const useMarketStore = defineStore('market', {
     prices: {},
     feePct: 4,
     updatedAt: null,
-    plots: { field: 6, 'red-pear-tree': 2, 'rubber-tree': 2, 'quartz-vein': 1, 'cobweb-stump': 1 }
+    plots: { field: 6, 'red-pear-tree': 2, 'rubber-tree': 2, 'quartz-vein': 1, 'cobweb-stump': 1 },
+    clearedBackup: null
   }),
   actions: {
     setPrice(id: string, value: number | string | null) {
@@ -28,8 +30,15 @@ export const useMarketStore = defineStore('market', {
       this.plots[kind] = Number.isNaN(n) ? 0 : Math.min(99, Math.max(0, n))
     },
     clearPrices() {
+      this.clearedBackup = { ...this.prices }
       this.prices = {}
       this.updatedAt = null
+    },
+    restoreCleared() {
+      if (!this.clearedBackup) return
+      this.prices = { ...this.clearedBackup }
+      this.clearedBackup = null
+      this.updatedAt = new Date().toISOString()
     },
     // Apply prices from a share link: entries the link carries overwrite, ids the
     // sender left blank keep whatever the receiver already had.

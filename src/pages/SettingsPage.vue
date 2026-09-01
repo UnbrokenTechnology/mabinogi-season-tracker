@@ -47,6 +47,24 @@ function importJson(ev: Event) {
   reader.readAsText(file)
 }
 
+function clearMarketPrices() {
+  $q.dialog({
+    title: 'Clear all Market prices?',
+    message: 'This empties every price on the Market tab. A safety copy is kept until the next clear — the Market tab shows a Restore button afterwards.',
+    cancel: true,
+    ok: { label: 'Clear prices', color: 'negative' }
+  }).onOk(() => {
+    stores.market.clearPrices()
+    $q.notify({
+      message: 'Market prices cleared.',
+      color: 'warning',
+      icon: 'backspace',
+      timeout: 8000,
+      actions: [{ label: 'Undo', color: 'white', handler: () => stores.market.restoreCleared() }]
+    })
+  })
+}
+
 function resetAll() {
   $q.dialog({
     title: 'Reset everything?',
@@ -86,7 +104,10 @@ function resetAll() {
         <q-card flat class="fg-card">
           <q-card-section>
             <div class="text-subtitle1 text-weight-bold text-negative q-mb-sm">Danger zone</div>
-            <q-btn outline color="negative" icon="delete_forever" label="Reset all data" @click="resetAll" />
+            <div class="row q-gutter-sm">
+              <q-btn outline color="warning" icon="backspace" label="Clear Market prices" @click="clearMarketPrices" />
+              <q-btn outline color="negative" icon="delete_forever" label="Reset all data" @click="resetAll" />
+            </div>
           </q-card-section>
         </q-card>
       </div>
