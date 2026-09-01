@@ -133,7 +133,7 @@ export const HELP: Record<string, HelpTopic> = {
   },
   rawCrops: {
     title: 'Raw crops only',
-    text: "Pure grow-and-sell income: one unit's AH price net of the fee, divided by grow time, projected over the 1/8/24 h toggle — no crafting anywhere.\n\nCompare against the Max Profit Planner: the gap between a crop's raw line here and its line there is what crafting adds. Same assumptions: ×1 yield, instant replanting, no Bounty."
+    text: "Pure grow-and-sell income: one unit's AH price net of the fee, divided by grow time — no crafting anywhere. Shown per plot over 1 hour and 8 hours side by side, with the all-plots figure under each.\n\nCompare against the Max Profit Planner: the gap between a crop's raw number here and its line there is what crafting adds. Same assumptions: ×1 yield, instant replanting, no Bounty."
   },
   farmPlanner: {
     title: 'Gold per plot-hour',
