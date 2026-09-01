@@ -9,6 +9,7 @@ interface MarketState {
   updatedAt: string | null
   plots: Record<PlotKind, number>   // this player's farm layout; Farm Expansion goals add more
   clearedBackup: Record<string, number | null> | null   // safety copy from the last Clear all
+  plannerHours: number
 }
 
 export const useMarketStore = defineStore('market', {
@@ -17,7 +18,8 @@ export const useMarketStore = defineStore('market', {
     feePct: 4,
     updatedAt: null,
     plots: { field: 6, 'red-pear-tree': 2, 'rubber-tree': 2, 'quartz-vein': 1, 'cobweb-stump': 1 },
-    clearedBackup: null
+    clearedBackup: null,
+    plannerHours: 1        // period the Farm Planner projects over (1 / 8 / 24 h)
   }),
   actions: {
     setPrice(id: string, value: number | string | null) {

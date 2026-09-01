@@ -124,6 +124,31 @@ function valueText(m: FarmMaterial, v: MaterialValue): string {
   return parts.join(' · ')
 }
 
+// ---- projection period (1 / 8 / 24 h) ----
+const hoursOptions = [
+  { label: '1 h', value: 1 },
+  { label: '8 h', value: 8 },
+  { label: '24 h', value: 24 }
+]
+const perLabel = computed(() => market.plannerHours === 1 ? 'hr' : `${market.plannerHours} h`)
+const overHours = (perHour: number) => perHour * market.plannerHours
+
+/** Sell-raw-only income rate for one plot of a crop, regardless of what the best use is. */
+function rawPerPlotHour(m: FarmMaterial): number | null {
+  const p = market.prices[m.id]
+  return p == null ? null : netSale(p, market.feePct) * 60 / m.growMinutes
+}
+
+const rawRows = computed(() => FARM_MATERIALS.map(m => {
+  const p = market.prices[m.id]
+  return {
+    m,
+    perHour: rawPerPlotHour(m),
+    unitNet: p == null ? null : netSale(p, market.feePct),
+    plotCount: market.plots[m.plot] ?? 0
+  }
+}))
+
 function fmtGold(n: number): string { return Math.round(n).toLocaleString() }
 function profitClass(p: number | null): string {
   if (p == null) return 'fg-muted'
@@ -238,12 +263,15 @@ const updatedText = computed(() => market.updatedAt
           </q-card-section>
         </q-card>
 
-        <!-- Farm planner -->
+        <!-- Max profit planner -->
         <q-card flat class="fg-card q-mt-md">
           <div class="fg-bar">
             <q-icon name="agriculture" class="fg-bar-gold" size="18px" />
-            <span class="fg-bar-title">Farm Planner</span>
+            <span class="fg-bar-title">Max Profit Planner</span>
             <HelpTip topic="farmPlanner" light class="q-ml-xs" />
+            <q-space />
+            <q-btn-toggle v-model="market.plannerHours" :options="hoursOptions" dense flat size="sm"
+                          toggle-color="secondary" text-color="white" />
           </div>
 
           <q-card-section class="q-py-sm">
@@ -275,8 +303,8 @@ const updatedText = computed(() => market.updatedAt
                 </div>
               </div>
               <div class="col-auto text-right text-weight-bold" :class="row.v ? 'fg-green-text' : 'fg-muted'">
-                {{ row.v ? fmtGold(row.v.perPlotHour) + 'g' : '—' }}
-                <div class="text-caption fg-muted" style="font-weight: 400">per plot · hr</div>
+                {{ row.v ? fmtGold(overHours(row.v.perPlotHour)) + 'g' : '—' }}
+                <div class="text-caption fg-muted" style="font-weight: 400">per plot · {{ perLabel }}</div>
               </div>
             </div>
           </q-card-section>
@@ -293,8 +321,8 @@ const updatedText = computed(() => market.updatedAt
                 </div>
               </div>
               <div class="col-auto text-right text-weight-bold" :class="row.v ? 'fg-green-text' : 'fg-muted'">
-                {{ row.v ? fmtGold(row.v.perPlotHour * (market.plots[row.m.plot] ?? 0)) + 'g' : '—' }}
-                <div class="text-caption fg-muted" style="font-weight: 400">all {{ market.plots[row.m.plot] }} · hr</div>
+                {{ row.v ? fmtGold(overHours(row.v.perPlotHour * (market.plots[row.m.plot] ?? 0))) + 'g' : '—' }}
+                <div class="text-caption fg-muted" style="font-weight: 400">all {{ market.plots[row.m.plot] }} · {{ perLabel }}</div>
               </div>
             </div>
           </q-card-section>
@@ -302,7 +330,7 @@ const updatedText = computed(() => market.updatedAt
 
           <q-card-section class="q-py-sm">
             <div v-if="farmPerHour.any" class="text-subtitle2 fg-ink">
-              Whole farm ≈ <b class="fg-green-text">{{ fmtGold(farmPerHour.total) }}g / active hour</b>
+              Whole farm ≈ <b class="fg-green-text">{{ fmtGold(overHours(farmPerHour.total)) }}g / active {{ perLabel }}</b>
               <span v-if="farmPerHour.missing" class="text-caption fg-muted"> (some plots unpriced)</span>
             </div>
             <div v-else class="text-caption fg-muted">
@@ -312,6 +340,40 @@ const updatedText = computed(() => market.updatedAt
             <div class="text-caption fg-muted q-mt-xs">
               Assumes ×1 yield, instant replanting, no Bounty (Bounty cuts grow time 80% — spend it on the
               longest timers). Craft with Commons: quality doesn't affect cauldron output.
+            </div>
+          </q-card-section>
+        </q-card>
+
+        <!-- Raw crops only -->
+        <q-card flat class="fg-card q-mt-md">
+          <div class="fg-bar">
+            <q-icon name="eco" class="fg-bar-gold" size="18px" />
+            <span class="fg-bar-title">Raw Crops Calculations</span>
+            <HelpTip topic="rawCrops" light class="q-ml-xs" />
+            <q-space />
+            <q-btn-toggle v-model="market.plannerHours" :options="hoursOptions" dense flat size="sm"
+                          toggle-color="secondary" text-color="white" />
+          </div>
+          <q-card-section class="q-py-sm">
+            <div v-for="row in rawRows" :key="row.m.id" class="row items-center q-py-xs q-px-sm">
+              <div class="col">
+                <span class="text-weight-bold fg-ink">{{ row.m.label }}</span>
+                <span v-if="row.m.plot !== 'field'" class="text-caption fg-muted q-ml-xs">×{{ row.plotCount }}</span>
+                <div class="text-caption fg-muted">
+                  {{ row.m.growMinutes }} min grow<template v-if="row.unitNet != null"> · nets {{ fmtGold(row.unitNet) }}g/unit</template>
+                </div>
+              </div>
+              <div class="col-auto text-right text-weight-bold" :class="row.perHour != null ? 'fg-green-text' : 'fg-muted'">
+                {{ row.perHour != null ? fmtGold(overHours(row.perHour)) + 'g' : '—' }}
+                <div class="text-caption fg-muted" style="font-weight: 400">per plot · {{ perLabel }}</div>
+                <div v-if="row.perHour != null && row.plotCount > 1" class="text-caption fg-muted" style="font-weight: 400">
+                  all {{ row.plotCount }}: {{ fmtGold(overHours(row.perHour * row.plotCount)) }}g
+                </div>
+              </div>
+            </div>
+            <div class="text-caption fg-muted q-mt-xs">
+              Grow-and-sell-raw only — no crafting anywhere. Field crops share the {{ market.plots.field }} fields;
+              their "all" line imagines every field on that one crop.
             </div>
           </q-card-section>
         </q-card>
