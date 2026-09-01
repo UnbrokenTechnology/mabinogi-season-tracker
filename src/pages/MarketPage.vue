@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useQuasar, copyToClipboard } from 'quasar'
 import { FARM_MATERIALS, CAULDRONS, RECIPES, PLOT_LABELS, type CauldronRecipe, type PlotKind, type FarmMaterial } from '../data/cauldron'
 import { craftCost, craftProfit, byProfitDesc, materialBestUse, netSale, type MaterialValue } from '../lib/market'
+import { computeRatioPlan } from '../lib/ratioPlan'
 import { encodePrices, decodePrices, sharedPriceCount } from '../lib/share'
 import { useMarketStore } from '../stores/market'
 import HelpTip from '../components/HelpTip.vue'
@@ -138,6 +139,26 @@ function rawPerPlotHour(m: FarmMaterial): number | null {
   const p = market.prices[m.id]
   return p == null ? null : netSale(p, market.feePct) * 60 / m.growMinutes
 }
+
+// ---- true ratio plan (LP over field split, craft rates, cauldron caps) ----
+const ratioPlan = computed(() =>
+  computeRatioPlan({ prices: market.prices, feePct: market.feePct, plots: market.plots })
+)
+const recipeLabel = (id: string) => RECIPES.find(r => r.id === id)?.label ?? id
+const fmtRate = (n: number) => (Math.round(n * 10) / 10).toLocaleString()
+const craftingGainPct = computed(() => {
+  const p = ratioPlan.value
+  if (!p || p.rawOnlyGoldPerHour <= 0) return null
+  return Math.round((p.goldPerHour / p.rawOnlyGoldPerHour - 1) * 100)
+})
+const cauldronLoadText = computed(() => {
+  const p = ratioPlan.value
+  if (!p) return ''
+  return CAULDRONS
+    .filter(c => (p.cauldronMinutes[c.id] ?? 0) > 0.05)
+    .map(c => `${c.label} ${Math.round(p.cauldronMinutes[c.id])}/60 min`)
+    .join(' · ')
+})
 
 const rawRows = computed(() => FARM_MATERIALS.map(m => {
   const p = market.prices[m.id]
@@ -387,6 +408,75 @@ const updatedText = computed(() => market.updatedAt
               "all" line = every plot of its kind on this crop (field crops share the {{ market.plots.field }} fields).
             </div>
           </q-card-section>
+        </q-card>
+
+        <!-- True ratio plan -->
+        <q-card flat class="fg-card q-mt-md">
+          <div class="fg-bar">
+            <q-icon name="account_tree" class="fg-bar-gold" size="18px" />
+            <span class="fg-bar-title">True Ratio Planner</span>
+            <HelpTip topic="ratioPlan" light class="q-ml-xs" />
+            <q-space />
+            <q-btn-toggle v-model="market.plannerHours" :options="hoursOptions" dense flat size="sm"
+                          toggle-color="secondary" text-color="white" />
+          </div>
+
+          <q-card-section v-if="!ratioPlan" class="q-py-sm text-caption fg-muted">
+            Enter prices above — the plan appears once at least one crop or recipe is priced.
+          </q-card-section>
+          <template v-else>
+            <q-card-section class="q-py-sm">
+              <div class="fg-label q-mb-xs">Plant</div>
+              <div class="row q-gutter-xs">
+                <q-chip v-for="a in ratioPlan.fieldAlloc" :key="a.materialId" dense square
+                        class="fg-tint-green text-weight-bold">
+                  {{ fmtRate(a.fields) }} × {{ materialLabel(a.materialId) }}
+                </q-chip>
+                <span v-if="ratioPlan.fieldAlloc.length === 0" class="text-caption fg-muted">no fields in use</span>
+              </div>
+            </q-card-section>
+            <q-separator />
+
+            <q-card-section class="q-py-sm">
+              <div class="fg-label q-mb-xs">Craft (per {{ perLabel }})</div>
+              <div v-for="c in ratioPlan.crafts" :key="c.recipeId" class="row items-center q-py-xs q-px-sm">
+                <div class="col text-weight-bold fg-ink">{{ recipeLabel(c.recipeId) }}</div>
+                <div class="col-auto text-right text-weight-bold fg-green-text">
+                  ×{{ fmtRate(overHours(c.perHour)) }}
+                </div>
+              </div>
+              <div v-if="ratioPlan.crafts.length === 0" class="text-caption fg-muted q-px-sm">
+                Nothing worth crafting at these prices — sell everything raw.
+              </div>
+              <div v-if="cauldronLoadText" class="text-caption fg-muted q-px-sm q-mt-xs">
+                Cauldron load: {{ cauldronLoadText }}
+              </div>
+            </q-card-section>
+            <q-separator />
+
+            <q-card-section v-if="ratioPlan.rawSales.length" class="q-py-sm">
+              <div class="fg-label q-mb-xs">Sell raw (surplus, per {{ perLabel }})</div>
+              <div class="text-body2 fg-ink q-px-sm">
+                <span v-for="(s, i) in ratioPlan.rawSales" :key="s.materialId">
+                  {{ materialLabel(s.materialId) }} ×{{ fmtRate(overHours(s.perHour)) }}<template v-if="i < ratioPlan.rawSales.length - 1"> · </template>
+                </span>
+              </div>
+            </q-card-section>
+            <q-separator v-if="ratioPlan.rawSales.length" />
+
+            <q-card-section class="q-py-sm">
+              <div class="text-subtitle2 fg-ink">
+                Plan ≈ <b class="fg-green-text">{{ fmtGold(overHours(ratioPlan.goldPerHour)) }}g / active {{ perLabel }}</b>
+              </div>
+              <div class="text-caption fg-muted">
+                vs {{ fmtGold(overHours(ratioPlan.rawOnlyGoldPerHour)) }}g selling everything raw<template v-if="craftingGainPct != null && craftingGainPct > 0"> — crafting adds {{ craftingGainPct }}%</template>
+              </div>
+              <div class="text-caption fg-muted q-mt-xs">
+                Grows every ingredient itself — no buying. Fractional fields = time-share the plot.
+                Base craft times, ×1 yield, no Bounty/energy, everything sells at your prices.
+              </div>
+            </q-card-section>
+          </template>
         </q-card>
       </div>
 
