@@ -133,6 +133,6 @@ export const HELP: Record<string, HelpTopic> = {
   },
   farmPlanner: {
     title: 'Gold per plot-hour',
-    text: "Each material's value per unit = the better of selling it raw (net of the AH fee) or feeding it into its best recipe (net sale minus the other ingredients at your prices, split across the units it consumes). Divide by grow time → gold per plot-hour.\n\nOnly Jasmine, Okra and Blackberry compete for Fields — every other plot grows exactly one thing, so its only question is what to do with the harvest. Grow times are wiki-verified; plot counts are yours to edit as Farm Expansion goals add more."
+    text: "Each material's value per unit = the better of selling it raw (net of the AH fee) or feeding it into its best recipe (net sale minus the other ingredients at your prices, split across the units it consumes). Divide by grow time → gold per plot-hour.\n\nHeads-up: while a CRAFT is winning, the crop's own AH price isn't part of that number — the craft's value comes from the product and the other ingredients. Editing a crop's price moves its 'raw' value (shown alongside) and other crops' rows, and only flips this row once raw beats the craft.\n\nOnly Jasmine, Okra and Blackberry compete for Fields — every other plot grows exactly one thing, so its only question is what to do with the harvest. Grow times are wiki-verified; plot counts are yours to edit as Farm Expansion goals add more."
   }
 }

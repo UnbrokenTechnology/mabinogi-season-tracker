@@ -3,7 +3,7 @@ import { computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useQuasar, copyToClipboard } from 'quasar'
 import { FARM_MATERIALS, CAULDRONS, RECIPES, PLOT_LABELS, type CauldronRecipe, type PlotKind, type FarmMaterial } from '../data/cauldron'
-import { craftCost, craftProfit, byProfitDesc, materialBestUse, type MaterialValue } from '../lib/market'
+import { craftCost, craftProfit, byProfitDesc, materialBestUse, netSale, type MaterialValue } from '../lib/market'
 import { encodePrices, decodePrices, sharedPriceCount } from '../lib/share'
 import { useMarketStore } from '../stores/market'
 import HelpTip from '../components/HelpTip.vue'
@@ -114,6 +114,15 @@ const farmPerHour = computed(() => {
 
 const useText = (v: MaterialValue) =>
   v.use === 'raw' ? 'sell raw' : `craft ${RECIPES.find(r => r.id === v.use)?.label ?? v.use}`
+
+// Caption showing BOTH unit values, so editing a crop's own price visibly moves its
+// row even while a craft (which ignores the crop's own price) is winning.
+function valueText(m: FarmMaterial, v: MaterialValue): string {
+  const parts = [`${useText(v)} ${fmtGold(v.value)}g/unit`]
+  const raw = market.prices[m.id]
+  if (v.use !== 'raw' && raw != null) parts.push(`raw ${fmtGold(netSale(raw, market.feePct))}g`)
+  return parts.join(' · ')
+}
 
 function fmtGold(n: number): string { return Math.round(n).toLocaleString() }
 function profitClass(p: number | null): string {
@@ -259,7 +268,7 @@ const updatedText = computed(() => market.updatedAt
                 <span class="text-weight-bold fg-ink">{{ row.m.label }}</span>
                 <span v-if="i === 0 && row.v" class="fg-gold-badge q-ml-sm" style="font-size: 9px">plant this</span>
                 <div class="text-caption fg-muted">
-                  {{ row.m.growMinutes }} min grow<template v-if="row.v"> · {{ useText(row.v) }}</template>
+                  {{ row.m.growMinutes }} min grow<template v-if="row.v"> · {{ valueText(row.m, row.v) }}</template>
                 </div>
               </div>
               <div class="col-auto text-right text-weight-bold" :class="row.v ? 'fg-green-text' : 'fg-muted'">
@@ -277,7 +286,7 @@ const updatedText = computed(() => market.updatedAt
                 <span class="text-weight-bold fg-ink">{{ row.m.label }}</span>
                 <span class="text-caption fg-muted q-ml-xs">×{{ market.plots[row.m.plot] }}</span>
                 <div class="text-caption fg-muted">
-                  {{ row.m.growMinutes }} min grow<template v-if="row.v"> · {{ useText(row.v) }}</template>
+                  {{ row.m.growMinutes }} min grow<template v-if="row.v"> · {{ valueText(row.m, row.v) }}</template>
                 </div>
               </div>
               <div class="col-auto text-right text-weight-bold" :class="row.v ? 'fg-green-text' : 'fg-muted'">
