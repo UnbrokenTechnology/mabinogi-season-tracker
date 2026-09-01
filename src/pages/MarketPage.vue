@@ -260,7 +260,8 @@ const updatedText = computed(() => market.updatedAt
           <q-card-section class="q-py-sm">
             <div class="fg-label q-mb-xs">Plant on your {{ market.plots.field }} fields</div>
             <div v-if="!fieldRank[0]?.v" class="text-caption fg-muted">
-              Needs prices — a field crop ranks once its raw price or one of its recipes is fully priced.
+              Needs prices — start with the crop prices in <b>Material Prices</b> above. A crop ranks once
+              its own price is in (sell-raw value), and recipe sell prices sharpen it from there.
             </div>
             <div v-for="(row, i) in fieldRank" :key="row.m.id" class="row items-center q-py-xs"
                  :class="i === 0 && row.v ? 'fg-tint-gold rounded-borders q-px-sm' : 'q-px-sm'">
@@ -302,7 +303,10 @@ const updatedText = computed(() => market.updatedAt
               Whole farm ≈ <b class="fg-green-text">{{ fmtGold(farmPerHour.total) }}g / active hour</b>
               <span v-if="farmPerHour.missing" class="text-caption fg-muted"> (some plots unpriced)</span>
             </div>
-            <div v-else class="text-caption fg-muted">Enter prices to see what an hour of farming is worth.</div>
+            <div v-else class="text-caption fg-muted">
+              Enter the crop prices in Material Prices above to see what an hour of farming is worth —
+              or apply someone's share link to fill the whole sheet at once.
+            </div>
             <div class="text-caption fg-muted q-mt-xs">
               Assumes ×1 yield, instant replanting, no Bounty (Bounty cuts grow time 80% — spend it on the
               longest timers). Craft with Commons: quality doesn't affect cauldron output.
