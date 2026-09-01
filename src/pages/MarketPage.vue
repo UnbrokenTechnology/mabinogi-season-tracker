@@ -284,6 +284,51 @@ const updatedText = computed(() => market.updatedAt
           </q-card-section>
         </q-card>
 
+        <!-- Raw crops only -->
+        <q-card flat class="fg-card q-mt-md">
+          <div class="fg-bar">
+            <q-icon name="eco" class="fg-bar-gold" size="18px" />
+            <span class="fg-bar-title">Raw Crops Calculations</span>
+            <HelpTip topic="rawCrops" light class="q-ml-xs" />
+          </div>
+          <q-card-section class="q-py-sm">
+            <div class="row q-px-sm q-pb-xs">
+              <div class="col"></div>
+              <div class="col-auto text-right fg-label" style="width: 100px">1 hour</div>
+              <div class="col-auto text-right fg-label" style="width: 112px">8 hours</div>
+            </div>
+            <div v-for="row in rawRows" :key="row.m.id" class="row items-start q-py-xs q-px-sm">
+              <div class="col">
+                <span class="text-weight-bold fg-ink">{{ row.m.label }}</span>
+                <span v-if="row.m.plot !== 'field'" class="text-caption fg-muted q-ml-xs">×{{ row.plotCount }}</span>
+                <div class="text-caption fg-muted">
+                  {{ row.m.growMinutes }} min grow<template v-if="row.unitNet != null"> · nets {{ fmtGold(row.unitNet) }}g/unit</template>
+                </div>
+              </div>
+              <div class="col-auto text-right" style="width: 100px">
+                <div class="text-weight-bold" :class="row.perHour != null ? 'fg-green-text' : 'fg-muted'">
+                  {{ row.perHour != null ? fmtGold(row.perHour) + 'g' : '—' }}
+                </div>
+                <div v-if="row.perHour != null && row.plotCount > 1" class="text-caption fg-muted">
+                  all {{ row.plotCount }}: {{ fmtGold(row.perHour * row.plotCount) }}g
+                </div>
+              </div>
+              <div class="col-auto text-right" style="width: 112px">
+                <div class="text-weight-bold" :class="row.perHour != null ? 'fg-green-text' : 'fg-muted'">
+                  {{ row.perHour != null ? fmtGold(row.perHour * 8) + 'g' : '—' }}
+                </div>
+                <div v-if="row.perHour != null && row.plotCount > 1" class="text-caption fg-muted">
+                  all {{ row.plotCount }}: {{ fmtGold(row.perHour * 8 * row.plotCount) }}g
+                </div>
+              </div>
+            </div>
+            <div class="text-caption fg-muted q-mt-xs">
+              Grow-and-sell-raw only — no crafting. Big number = ONE plot of that crop; the
+              "all" line = every plot of its kind on this crop (field crops share the {{ market.plots.field }} fields).
+            </div>
+          </q-card-section>
+        </q-card>
+
         <!-- Max profit planner -->
         <q-card flat class="fg-card q-mt-md">
           <div class="fg-bar">
@@ -361,51 +406,6 @@ const updatedText = computed(() => market.updatedAt
             <div class="text-caption fg-muted q-mt-xs">
               Assumes ×1 yield, instant replanting, no Bounty (Bounty cuts grow time 80% — spend it on the
               longest timers). Craft with Commons: quality doesn't affect cauldron output.
-            </div>
-          </q-card-section>
-        </q-card>
-
-        <!-- Raw crops only -->
-        <q-card flat class="fg-card q-mt-md">
-          <div class="fg-bar">
-            <q-icon name="eco" class="fg-bar-gold" size="18px" />
-            <span class="fg-bar-title">Raw Crops Calculations</span>
-            <HelpTip topic="rawCrops" light class="q-ml-xs" />
-          </div>
-          <q-card-section class="q-py-sm">
-            <div class="row q-px-sm q-pb-xs">
-              <div class="col"></div>
-              <div class="col-auto text-right fg-label" style="width: 100px">1 hour</div>
-              <div class="col-auto text-right fg-label" style="width: 112px">8 hours</div>
-            </div>
-            <div v-for="row in rawRows" :key="row.m.id" class="row items-start q-py-xs q-px-sm">
-              <div class="col">
-                <span class="text-weight-bold fg-ink">{{ row.m.label }}</span>
-                <span v-if="row.m.plot !== 'field'" class="text-caption fg-muted q-ml-xs">×{{ row.plotCount }}</span>
-                <div class="text-caption fg-muted">
-                  {{ row.m.growMinutes }} min grow<template v-if="row.unitNet != null"> · nets {{ fmtGold(row.unitNet) }}g/unit</template>
-                </div>
-              </div>
-              <div class="col-auto text-right" style="width: 100px">
-                <div class="text-weight-bold" :class="row.perHour != null ? 'fg-green-text' : 'fg-muted'">
-                  {{ row.perHour != null ? fmtGold(row.perHour) + 'g' : '—' }}
-                </div>
-                <div v-if="row.perHour != null && row.plotCount > 1" class="text-caption fg-muted">
-                  all {{ row.plotCount }}: {{ fmtGold(row.perHour * row.plotCount) }}g
-                </div>
-              </div>
-              <div class="col-auto text-right" style="width: 112px">
-                <div class="text-weight-bold" :class="row.perHour != null ? 'fg-green-text' : 'fg-muted'">
-                  {{ row.perHour != null ? fmtGold(row.perHour * 8) + 'g' : '—' }}
-                </div>
-                <div v-if="row.perHour != null && row.plotCount > 1" class="text-caption fg-muted">
-                  all {{ row.plotCount }}: {{ fmtGold(row.perHour * 8 * row.plotCount) }}g
-                </div>
-              </div>
-            </div>
-            <div class="text-caption fg-muted q-mt-xs">
-              Grow-and-sell-raw only — no crafting. Big number = ONE plot of that crop; the
-              "all" line = every plot of its kind on this crop (field crops share the {{ market.plots.field }} fields).
             </div>
           </q-card-section>
         </q-card>
