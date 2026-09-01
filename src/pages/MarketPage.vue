@@ -170,6 +170,16 @@ const rawRows = computed(() => FARM_MATERIALS.map(m => {
   }
 }))
 
+// The raw-crops contest is between the field crops — fixed plots run regardless.
+const bestRawField = computed(() => {
+  let best: { id: string; label: string; perHour: number } | null = null
+  for (const r of rawRows.value) {
+    if (r.m.plot !== 'field' || r.perHour == null) continue
+    if (!best || r.perHour > best.perHour) best = { id: r.m.id, label: r.m.label, perHour: r.perHour }
+  }
+  return best
+})
+
 function fmtGold(n: number): string { return Math.round(n).toLocaleString() }
 function profitClass(p: number | null): string {
   if (p == null) return 'fg-muted'
@@ -290,6 +300,10 @@ const updatedText = computed(() => market.updatedAt
             <q-icon name="eco" class="fg-bar-gold" size="18px" />
             <span class="fg-bar-title">Raw Crops Calculations</span>
             <HelpTip topic="rawCrops" light class="q-ml-xs" />
+            <q-space />
+            <span v-if="bestRawField" class="text-caption" style="opacity: 0.9">
+              best field: {{ bestRawField.label }} <b>{{ fmtGold(bestRawField.perHour) }}g/plot·hr</b>
+            </span>
           </div>
           <q-card-section class="q-py-sm">
             <div class="row q-px-sm q-pb-xs">
@@ -297,9 +311,11 @@ const updatedText = computed(() => market.updatedAt
               <div class="col-auto text-right fg-label" style="width: 100px">1 hour</div>
               <div class="col-auto text-right fg-label" style="width: 112px">8 hours</div>
             </div>
-            <div v-for="row in rawRows" :key="row.m.id" class="row items-start q-py-xs q-px-sm">
+            <div v-for="row in rawRows" :key="row.m.id" class="row items-start q-py-xs q-px-sm"
+                 :class="bestRawField && row.m.id === bestRawField.id ? 'fg-tint-gold rounded-borders' : ''">
               <div class="col">
                 <span class="text-weight-bold fg-ink">{{ row.m.label }}</span>
+                <span v-if="bestRawField && row.m.id === bestRawField.id" class="fg-gold-badge q-ml-sm" style="font-size: 9px">best crop</span>
                 <span v-if="row.m.plot !== 'field'" class="text-caption fg-muted q-ml-xs">×{{ row.plotCount }}</span>
                 <div class="text-caption fg-muted">
                   {{ row.m.growMinutes }} min grow<template v-if="row.unitNet != null"> · nets {{ fmtGold(row.unitNet) }}g/unit</template>
